@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KlassConnect</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="icon" href="/src/KlassConnect logo.svg" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lora:wght@400;700&display=swap"
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+
+
+</head>
+
+<body>
+  <!-- CURSOR DOT & OUTLINE -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+
+  <nav>
+    <div class="dash-nav flex-row flex-between flex-center pt-1">
+    <div class="dash-left">
+      <a href="/index.html">
+        <h2>KlassConnect</h2>
+      </a>
+    </div>
+    <div class="right-dash">
+      <div class="flex-row user-profile flex-center gap-logout">
+        <img src="./src/login.jpg" alt="login" class="login-photo">
+        <div class="user-name">Shawaiz</div>
+        <button class="logout-btn" id="logout">
+        <ion-icon name="caret-down-outline"></ion-icon>
+      </button>
+      </div>
+    </div>
+  </div>
+  </nav>
+  <div class="logout-modal">
+    <span class="logout-text">Logout</span>
+   </div>
+  <!-- NAVBAR -->
+  <!-- <nav class="flex-row flex-between pt-1  wrap ">
+    <ul class="logo nav-left">
+      <a href="/index.html">
+        <h2>KlassConnect</h2>
+      </a>
+    </ul>
+      
+       <div class="flex-row  user-profile ">
+        <img src="./src/login.jpg" alt="login" class="login-photo">
+        <li class="user-name">Shawaiz</li>
+      </div>
+  </nav> -->
+  
+
+
+  <!-- DASHBOARD -->
+ <section class="dashboard flex-row">
+  <div class="left-section pt-2">
+   <ul class="dashboard-ul flex-column align">
+    <li>
+      <button class="btn dash flex-row align">
+      <ion-icon name="home-outline"></ion-icon>
+        Dashboard</button>
+    </li>
+    <li>
+      <button class="btn dash flex-row align">
+      <ion-icon name="list-circle-outline"></ion-icon>
+        Assignments</button>
+    </li>
+    <li>
+      <button class="btn dash flex-row align">
+      <ion-icon name="stats-chart-outline"></ion-icon>
+        Stats</button>
+    </li>
+    <li>
+      <button class="btn dash course flex-row align" id="loadCourses">
+      <ion-icon name="list-circle-outline "></ion-icon>
+        Courses</button>
+    </li>
+    <li>
+      <button class="btn dash flex-row align | enrolled">
+      <ion-icon name="book-outline"></ion-icon>
+        Enrolled Courses</button>
+    </li>
+   </ul>
+   </div>
+   <div class="right-sec">
+    <div class="dashboard-content"></div> <!-- This will hold the dynamically loaded courses -->
+</section>
+<script type="module" src="/src/dashboard.js"></script>
+<script type="module" src="/src/cursor.js"></script>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

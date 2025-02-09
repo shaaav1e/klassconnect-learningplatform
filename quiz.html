@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KlassConnect - Quiz Generator</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="icon" href="/src/KlassConnect logo.svg" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+  
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+  <!-- CURSOR DOT & OUTLINE -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+
+  <!-- NAVBAR -->
+  <nav class="flex-row flex-evenly pt-1 flex-center wrap">
+    <ul class="logo nav-left">
+      <a href="#">
+        <h2>KlassConnect</h2>
+      </a>
+    </ul>
+    <ul class="nav-links nav-mid flex-row sm-gap">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/quiz.html">Quiz Generator</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="">Dashboard</a></li>
+    </ul>
+    <ul class="nav-right flex-row sm-gap">
+      <!-- <div class="flex-row flex-center icon-gap">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <li><a href="/signup.html">Sign Up</a></li>
+      </div> -->
+      <div class="">
+        <button class="login-btn flex-row ">
+          <a href="/login.html">
+            <!-- <ion-icon name="lock-open-outline"></ion-icon> -->
+            Login</a></button>
+      </div>
+    </ul>
+  </nav>
+
+  <!-- QUIZ -->
+  <div class="flex-column items-center bg-blue">
+    <h1>Welcome to KlassConnect!</h1>
+    <h2>Quiz Generator</h2>
+    <p>To get started, upload a PDF file and select the number of questions.</p>
+    <input type="file" id="pdfFile">
+    <input type="number" id="noofquestions" placeholder="Enter total questions" min="5"><br>
+    <!-- Updated button IDs -->
+    <button id="startQuizButton">Generate Quiz</button>
+    <button id="finishQuizButton" style="display: none;">Submit Quiz</button>
+  </div>
+
+  <!-- Container where MCQs will be displayed -->
+  <div id="mcqContainer"></div>
+
+  <!-- Show Score Here -->
+  <div id="resultContainer"></div>
+
+  <script type="module" src="/src/quiz.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+/* nav
+{
+  position:fixed;
+  width:100%;
+  z-index:9999;
+} */
+nav a
+{
+    color:rgb(15, 147, 199);
+}
+nav a:hover{
+    color:rgb(113, 151, 167);
+}
+.icon-gap
+{
+    gap:3px;
+}
+.sm-gap
+{
+  gap:4em;
+}
+.pt-1
+{
+  padding:1.2em 0;
+}
+.hero-text form input[type="search"] {
+  border-radius: 30px;
+  padding: 13px;
+  width:50%;
+  
+}
+input[type="search"]::placeholder {
+  font-family: 'Poppins', sans-serif; 
+  font-size: 1.2rem; 
+  color: #888; 
+ 
+}
+/* Typography */
+.hero-text h1
+{
+  margin-bottom:30px;
+}
+.hero-text p span
+{
+  font-size:2.2rem;
+}

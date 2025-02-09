@@ -1,0 +1,88 @@
+/* DASHBOARD NAV */
+.gap-logout
+{
+    gap:0.3em;
+}
+.dash-left
+{
+    padding-left:18em;
+}
+.right-dash
+{
+    padding-left:40em;
+}
+.user-profile
+{
+   position: relative;
+}
+/* .caret-down-outline
+{
+    z-index:10000000000000;
+} */
+.logout-modal
+{
+    position:absolute;
+    font-family: 'Poppins', sans-serif;
+    /* text-decoration: underline; */
+    left: 78%;
+    /* right:20%; */
+     top:8%;
+    /* bottom:15%; */
+    border-radius:5px;
+    background:white;
+    color:black;
+    padding:0.8em 1em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index:100000;
+    display:none;
+    cursor:pointer;
+}
+.logout-modal.show
+{
+    display:block;
+}
+.logout-modal:hover
+{
+    background:var(--primary-gradient);
+    color:white;
+}
+
+/* DASHBOARD LEFT AND RIGHT */
+.left-section
+{
+    background: var(--primary-gradient);
+    /* padding-left: 1.5em; */
+    width:15%;
+    height:100vh;
+}
+.dash
+{
+    border-radius:5px !important;
+    gap:1em;
+    
+}
+.dashboard-ul
+{
+    gap:1em;
+   
+}
+/* NEED TO SET EQUAL WIDTH HEIGHT FOR ALL BUTTONS */
+.login-photo
+{
+    border-radius:10px;
+    width:4%;
+    height:4%;
+}
+.user-name
+{
+    font-size:1rem;
+    color:var(--primary-gradient) !important;
+}
+.flex-1
+{
+    flex:1;
+}
+.user-profile
+{
+    align-self: end;
+}
