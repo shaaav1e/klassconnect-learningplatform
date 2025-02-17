@@ -2,20 +2,19 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   server: {
-    // Ensure Vite's development server runs on the desired host and port
-    host: 'localhost', // Optional, but recommended
-    port: 5173,        // This is the default, but you can change if necessary
-    hmr: {
-      protocol: 'ws',     // WebSocket connection
-      host: 'localhost',  // Specify the host for HMR
-      port: 5174,         // Ensure it matches the WebSocket connection port
-    },
+    host: 'localhost',  // Optional, but recommended
+    port: 5176,         // Update this to the current port Vite is running on (5176 as per your previous message)
+    proxy: {
+      // Proxy API requests to the Flask backend
+      '/upload': 'http://127.0.0.1:5000',
+      '/submit_quiz': 'http://127.0.0.1:5000',
+    }
   },
   build: {
     rollupOptions: {
       input: {
-        main: 'index.html',        // Entry point for the main page
-        signup: 'signup.html',     // Entry point for signup page
+        main: 'index.html',
+        signup: 'signup.html',
         dashboard: 'dashboard.html',
         quiz: 'quiz.html',
         login: 'login.html'
