@@ -1,0 +1,137 @@
+/* DASHBOARD NAV */
+.gap-logout
+{
+    gap:0.3em;
+}
+.dash-left
+{
+    padding-left:18em;
+}
+.right-dash
+{
+    padding-left:40em;
+}
+.user-profile
+{
+   position: relative;
+}
+/* .caret-down-outline
+{
+    z-index:10000000000000;
+} */
+
+
+/* Logout styling */
+
+.logout-modal
+{
+    position:absolute;
+    font-family: 'Poppins', sans-serif;
+    /* text-decoration: underline; */
+    left: 78%;
+    /* right:20%; */
+     top:8%;
+    /* bottom:15%; */
+    border-radius:5px;
+    background:white;
+    color:black;
+    padding:0.8em 1em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index:100000;
+    display:none;
+    cursor:pointer;
+}
+.logout-modal.show
+{
+    display:block;
+}
+.logout-modal:hover
+{
+    background:var(--primary-gradient);
+    color:white;
+}
+
+/* DASHBOARD LEFT AND RIGHT */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh; /* Ensures it is at least 100vh, but can grow */
+}
+
+.left-section {
+    background: var(--primary-gradient);
+    width: 18%;
+    min-height:100vh;
+    height: auto; /* Allow it to grow with the content */
+    align-items: stretch; /* Ensures buttons stretch to equal width */
+}
+
+.right-sec {
+    flex-grow: 1; /* Takes up remaining space */
+    /* padding: 1em; */
+    overflow: auto; /* Allows scrolling if content is too long */
+}
+
+.dash
+{
+    border-radius:5px !important;
+    gap:1em;
+    
+}
+.dashboard-ul
+{
+    gap:1em;
+   
+}
+/* NEED TO SET EQUAL WIDTH HEIGHT FOR ALL BUTTONS */
+
+.sidebar-btn {
+    width: 100%; /* Ensures all buttons have equal width */
+    height: 50px; /* Fixed height for uniform size */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px; /* Spacing between icon and text */
+    font-size: 16px;
+    white-space: nowrap; /* Prevents text wrapping */
+    text-align: left;
+    background: var(--primary-color);
+    color: white;
+    /* border: 2px solid rgba(255, 255, 255, 0.3); Light border for better UI
+    border-radius: 6px;  */
+    cursor: pointer;
+    flex-shrink: 0; /* Prevents shrinking */
+}
+
+.sidebar-btn:hover {
+    background: var(--hover-color);
+    border-color: rgba(255, 255, 255, 0.6); /* Slightly darker on hover */
+    border-radius:10px;
+    border:2px solid burlywood;
+    color:orange;
+}
+
+.sidebar-btn ion-icon {
+    font-size: 20px;
+}
+
+
+.login-photo
+{
+    border-radius:10px;
+    width:4%;
+    height:4%;
+}
+.user-name
+{
+    font-size:1rem;
+    color:var(--primary-gradient) !important;
+}
+.flex-1
+{
+    flex:1;
+}
+.user-profile
+{
+    align-self: end;
+}

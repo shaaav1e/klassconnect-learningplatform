@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KlassConnect</title>
+  <link rel="stylesheet" href="/src/css/style.css">
+  <link rel="icon" href="/src/KlassConnect logo.svg" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lora:wght@400;700&display=swap"
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+
+  
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+</head>
+
+<body>
+  <!-- CURSOR DOT & OUTLINE -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+
+  
+  <!-- NAVBAR -->
+  <nav class="flex-row flex-evenly pt-1 flex-center wrap">
+    <ul class="logo nav-left">
+      <a href="/index.html">
+        <h2>KlassConnect</h2>
+      </a>
+    </ul>
+    <ul class="nav-links nav-mid flex-row sm-gap">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/quiz.html">Quiz Generator</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="/dashboard.html">Dashboard</a></li>
+    </ul>
+    <ul class="nav-right flex-row sm-gap">
+      <!-- <div class="flex-row flex-center icon-gap">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <li><a href="/signup.html">Sign Up</a></li>
+      </div> -->
+      <div class="">
+        <button class="login-btn flex-row ">
+          <a href="/login.html">
+            <!-- <ion-icon name="lock-open-outline"></ion-icon> -->
+            Login</a></button>
+      </div>
+    </ul>
+  </nav>
+  <main>
+    <!-- HERO -->
+    <section class="hero pt-3">
+      <div class="container flex-row spacing">
+        <div class="hero-text" data-aos="fade-left">
+          <h1>SAY NO TO <span>RATTA</span> SYSTEM!</h1>
+
+          <p>Learn <span>smarter,</span> not<span> harder</span>, with KlassConnect.</p>
+          <!-- <button class="btn">Get Started</button> -->
+          <form action="">
+            <input type="search" name="query" placeholder="Search our courses...">
+            <button class="btn">Learn More</button>
+          </form>
+        </div>
+        <div class="hero-img" data-aos="fade-right">
+          <img src="/src/hero-img.png" alt="Studying">
+        </div>
+      </div>
+    </section>
+    <!-- RATING -->
+    <section class="rating">
+      <div class="container">
+        <div class="rating-text">
+          <h2 class="text-center" | data-aos="fade-down">We support your <span>programming</span> journey!</h2>
+        </div>
+        <div class="cards flex-row flex-center" | data-aos="fade-left">
+          <div class="card one flex-row flex-center">
+            <img src="https://img.icons8.com/?size=100&id=g34sfj4NMisg&format=png&color=000000" alt="Graduated Student">
+            <div>
+              <h3>10.2k</h3>
+              <p>Students</p>
+            </div>
+          </div>
+          <div class="card two flex-row flex-center">
+            <img src="https://img.icons8.com/?size=100&id=7856&format=png&color=5C7CFA" alt="Rating">
+            <div>
+              <h3>4.9/5</h3>
+              <p>Rating</p>
+            </div>
+          </div>
+          <div class="card three flex-row flex-center">
+            <img src="https://img.icons8.com/?size=100&id=Q82WjgdMEzoU&format=png&color=000000" alt="Earth">
+            <div>
+              <h3>1k+</h3>
+              <p>Visitors</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- COURSES -->
+    <section class="courses pt-2" id="courses">
+      <div class="container">
+        <div class="course-text" | data-aos="zoom-in">
+          <h2 class="text-center">Popular <span>Courses</span></h2>
+          <p class="text-center courses-para">Our Project Based Courses</p>
+        </div>
+        <div class="courses-card flex-row flex-center wrap mb-2 pt-2" | data-aos="zoom-out">
+          <div class="course-card onee flex-column flex-center">
+            <img src="/src/web2.webp" alt="Web Development">
+            <h3>Web Development</h3>
+            <p>Build your first responsive website.</p>
+            <p class="price">3000 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn html-btn" data-course="HTMLCourse">Enroll Now</button>
+          </div>
+          <div class="course-card twoo flex-column flex-center">
+            <img src="/src/mobile2.jpg" alt="Mobie Application Development">
+            <h3>Mobile Application Development</h3>
+            <p>Build your first app.</p>
+            <p class="price">3500 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card three flex-column flex-center">
+            <img src="/src/python2.gif" alt="Python">
+            <h3>Introduction to Python</h3>
+            <p>Get Started with Python.</p>
+            <p class="price">2500 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card four flex-column flex-center">
+            <img src="/src/datascience.webp" alt="Data Science">
+            <h3>Introduction to Data Science</h3>
+            <p>Get Started with Data Science.</p>
+            <p class="price">4500 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card five flex-column flex-center">
+            <img src="/src/ai.jpg" alt="Artificial Intelligence">
+            <h3>Introduction to Artifical Intelligence</h3>
+            <p>Get Started with Basics of AI.</p>
+            <p class="price">6000 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card six flex-column flex-center">
+            <img src="/src/react2.png" alt="React">
+            <h3>Introduction to React</h3>
+            <p>Build your first website using React.</p>
+            <p class="price">7000 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- FAQ'S -->
+    <section class="faq mt-0">
+      <div class="container">
+        <h2 class="text-center | faq-text">FAQ's</h2>
+        <div class="accordian">
+
+          <div class="question flex-row align faq-gap flex-between">
+            <h4>Will I recieve a certificate for each course?</h4>
+            <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+          </div>
+          <div class="answer">
+            <p>Yes. Each student who completes any course will receive a certificate of completion to acknowledge their proficiency. We encourage students to include these on their LinkedIn profiles and in their job applications!</p>
+          </div>
+
+        </div>
+        <div class="accordian">
+
+          <div class="question flex-row align faq-gap flex-between">
+            <h4>Will I get the source code of each course?</h4>
+            <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+          </div>
+          <div class="answer">
+            <p>Yes. You will get source code of all courses when you complete the specific course videos.</p>
+          </div>
+
+        </div>
+        <div class="accordian ">
+
+          <div class="question flex-row align faq-gap flex-between">
+            <h4>Can i ask anything related course or if my code doesn't work?</h4>
+            <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+          </div>
+          <div class="answer">
+            <p>Yes. You can contact us via our email : klassconnectsupport@gmail.com</p>
+          </div>
+
+        </div>
+        <div class="accordian">
+
+          <div class="question flex-row align faq-gap flex-between">
+            <h4>Can i download course videos?</h4>
+            <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+          </div>
+          <div class="answer">
+            <p>For copyright reasons we don't encourage downloading them.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- NEWSLETTER TYPE -->
+     <section class="newsletter">
+      <div class="container flex-row align flex-between">
+        <div class="newsletter-text" | data-aos="fade-left">
+          <h2>Set a new goal for start of the new year</h2>
+          <p>There's no time like the present - save upto 30% with the code <span>K24</span>. <br>Offer ends Feburary 3rd, 2025</p>
+          <button class="btn news-btn">Learn More</button>
+      </div>
+      <div class="newsletter-img" | data-aos="fade-right">
+        <!-- <img src="src/30percent.avif" class="news-img" alt="30% Discount"> -->
+         <h1>30% OFF</h1>
+      </div>
+      </section>
+    <!-- FOOTER -->
+    <!-- Contents are not exactly in center -->
+    <!-- Justify and align both together cause allignment issues -->
+    <!-- The issue was due to newsletter p heading being too long -->
+    <section class="footer">
+      <div class=" container flex-row wrap flex-evenly footer-gap">
+        <ul class="footer-links">
+          <h2>About</h2>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+        <ul class="footer-links">
+          <h2>Socials</h2>
+          <li><a href="#">Youtube</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">GitHub</a></li>
+        </ul>
+        <ul class="footer-links">
+          <h2>Quick Links</h2>
+          <li><a href="#">Enrolled Courses</a></li>
+          <li><a href="#">Dashboard</a></li>
+        </ul>
+        <ul class="footer-links">
+          <h2>NewsLetter</h2>
+          <p>Subscribe to our newsletter<br> to get latest updates.</p> 
+          <form action="">
+            <input type="email" placeholder="Enter your email...">
+            <button class="btn">Subscribe</button>
+          </form>
+        </ul>
+        <p class="footer-copyright">Copyright © 2024 - 2025 KlassConnect | All Rights Reserved</p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/quiz.js"></script>
+  <script type="module" src="/src/js/cursor.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <!-- <script type="module" src="/src/aos.js"></script> -->
+</body>
+
+</html>

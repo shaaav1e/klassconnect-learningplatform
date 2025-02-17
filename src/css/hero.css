@@ -1,0 +1,46 @@
+/* .hero
+{
+    margin-top:8em;
+} */
+.hero-img
+{
+    
+    width:50%;
+    
+}
+.spacing
+{
+    gap:20px;
+}
+/* TYPOGRAPHY */
+.hero-text
+{
+    flex:1;
+    font-size:1.2rem;
+    font-weight:700; 
+    color:var(--light);
+}
+.hero-text h1
+{
+    font-size:4.5rem;
+}
+.hero-text h1 span
+{
+    font-family:'Lora',sans-serif;
+    font-size:7rem;
+    color:var(--dark);
+    position:relative;
+}
+.hero-text h1 span::after {
+    content: "";
+    position: absolute;
+    bottom: 0; /* Position at the bottom of the span */
+    left: 0;
+    width: 100%; /* Line will match the width of the span */
+    height: 13px; /* Line thickness */
+    background-color: var(--dark); /* Line color, change as needed */
+}
+.hero-text p
+{
+    margin-top:20px;
+}

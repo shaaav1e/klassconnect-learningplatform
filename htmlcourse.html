@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS Course | KlassConnect</title>
+    <link rel="stylesheet" href="/src/css/style.css">
+    <script type="module" type="text/javascript" src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="course-container flex-row">
+        <!-- Sidebar -->
+        <aside class="course-sidebar" id="courseSidebar">
+            <div class="sidebar-header flex-row flex-between align">
+                <h2>Course Content</h2>
+                <button class="toggle-sidebar" id="toggleSidebar">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="courseProgress"></div>
+                </div>
+                <span class="progress-text">0% Complete</span>
+            </div>
+
+            <!-- Chapter List -->
+            <ul class="chapter-list" id="chapterList">
+                <!-- Chapters will be dynamically inserted here -->
+            </ul>
+
+            <!-- Resize Handle -->
+            <div class="resize-handle" id="resizeHandle"></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="course-content" id="courseContent">
+            <div class="content-container">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation-controls flex-row flex-between">
+                <button class="btn nav-btn" id="prevBtn">
+                    <ion-icon name="arrow-back-outline"></ion-icon> Previous
+                </button>
+                <button class="btn nav-btn" id="nextBtn">
+                    Next <ion-icon name="arrow-forward-outline"></ion-icon>
+                </button>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/htmlcourse/sidebar.js"></script>
+    <script type="module" src="/src/js/htmlcourse/codeEditor.js"></script>
+    <script type="module" src="/src/js/htmlcourse/progress.js"></script>
+    <script type="module" src="/src/js/htmlcourse/navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+.newsletter
+{
+    background: linear-gradient( #95c9e7, #e5f1fa);
+}
+/* .newsletter-img
+{
+    width: 50%;
+} */
+.newsletter-img img
+{
+    border-radius:20px;
+    background:transparent;
+    /* transform: rotate(8deg); */
+    opacity:0.8;
+    /* transform-origin: center center; */
+}
+.news-btn
+{
+    background-color:var(--light);
+}
+/* TYPOGRAPHY */
+.newsletter-text
+{
+    padding: 8em 0;
+}
+.newsletter h2
+{
+    font-size: 2.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color:var(--light);
+    font-style:italic;
+}
+.newsletter p
+{
+    color:var(--dark);
+    margin-top:40px;
+    font-weight:600;
+}
+.newsletter span
+{
+    color:#083d72;
+    font-size:2.5rem;
+    /* transform:rotate(7deg);  not working! */
+}
+.newsletter-img h1
+{
+    font-size:10rem;
+    font-family:'Poppins',sans-serif;
+    /* transform:rotate(-7deg); */
+    /* font-style:italic; */
+    color:var(--dark);
+}

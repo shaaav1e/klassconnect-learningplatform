@@ -1,0 +1,26 @@
+<!-- src/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Generator</title>
+  </head>
+  <body>
+    <h1>Upload a PDF to Generate Quiz</h1>
+    <form id="uploadForm">
+      <input type="file" id="fileInput" name="file" accept=".pdf" required />
+      <label for="num_questions">Number of Questions:</label>
+      <input type="number" id="num_questions" name="num_questions" value="5" required />
+      <button type="submit">Upload and Generate Quiz</button>
+    </form>
+
+    <div id="quizSection" style="display: none;">
+      <h2>Quiz</h2>
+      <form id="quizForm"></form>
+      <button id="submitQuiz">Submit Quiz</button>
+    </div>
+
+    <script type="module" src="/src/js/quiz.js"></script>
+  </body>
+</html>
