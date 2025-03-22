@@ -179,7 +179,8 @@ def index():
 
 # Run the app
 if __name__ == "__main__":
-    # Get port from environment variable or default to 5000
+    # Get port from environment variable with fallback to 5000 (Render's preferred default)
     port = int(os.environ.get("PORT", 5000))
-    # Explicitly bind to 0.0.0.0 to listen on all interfaces
-    app.run(host="0.0.0.0", port=port)
+    print(f"Starting server on port {port}")  # Add explicit logging
+    # Explicitly bind to 0.0.0.0 to listen on all network interfaces
+    app.run(host="0.0.0.0", port=port, debug=False)  # Disable debug mode in production
