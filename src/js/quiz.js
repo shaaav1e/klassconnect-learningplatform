@@ -1,3 +1,5 @@
+const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+
 document.addEventListener("DOMContentLoaded", function () {
   const uploadForm = document.getElementById("uploadForm");
   const quizSection = document.getElementById("quizSection");
@@ -7,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultsSection = document.getElementById("resultsSection");
   const retakeQuizButton = document.getElementById("retakeQuiz");
 
-  const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+  console.log("Using BACKEND_URL:", BACKEND_URL);
 
   let currentQuiz = [];
 

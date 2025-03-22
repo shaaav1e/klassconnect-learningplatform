@@ -93,12 +93,13 @@
 
     <script type="module" src="/src/js/quiz.js"></script>
     <script type="module">
-      import API_BASE_URL from "./api-config.js";
+      // Define BACKEND_URL directly here:
+      const BACKEND_URL = "https://klassconnect-backend.onrender.com";
 
       async function uploadPDF() {
         const formData = new FormData(document.getElementById("uploadForm"));
         try {
-          const response = await fetch(`${API_BASE_URL}/upload`, {
+          const response = await fetch(`${BACKEND_URL}/upload`, {
             method: "POST",
             body: formData,
           });
@@ -111,7 +112,7 @@
       async function submitQuiz() {
         const userAnswers = {}; // Collect user answers
         try {
-          const response = await fetch(`${API_BASE_URL}/submit_quiz`, {
+          const response = await fetch(`${BACKEND_URL}/submit_quiz`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
