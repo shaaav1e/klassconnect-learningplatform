@@ -3,12 +3,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
   server: {
     host: "localhost", // Optional, but recommended
-    port: 5176, // Update this to the current port Vite is running on (5176 as per your previous message)
-    proxy: {
-      // Proxy API requests to the Flask backend (only used in development)
-      "/upload": "http://127.0.0.1:5000",
-      "/submit_quiz": "http://127.0.0.1:5000",
-    },
+    port: 5176, // Keep your development port
+    // Remove the proxy configuration as we'll use absolute URLs
   },
   build: {
     rollupOptions: {

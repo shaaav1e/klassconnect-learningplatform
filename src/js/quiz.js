@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultsSection = document.getElementById("resultsSection");
   const retakeQuizButton = document.getElementById("retakeQuiz");
 
+  const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+
   let currentQuiz = [];
 
   // Handle form submission for PDF upload
@@ -18,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const formData = new FormData(uploadForm);
 
-    fetch("/upload", {
+    fetch(`${BACKEND_URL}/upload`, {
       method: "POST",
       body: formData,
     })
@@ -135,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Submit answers to the server
-    fetch("/submit_quiz", {
+    fetch(`${BACKEND_URL}/submit_quiz`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
