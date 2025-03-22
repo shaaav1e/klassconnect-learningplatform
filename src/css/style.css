@@ -10,6 +10,7 @@
 @import './login.css';
 @import './dashboard.css';
 @import './htmlcourse.css';
+@import './quiz.css';
 
 /* Reset CSS */
 * {

@@ -81,12 +81,6 @@ def generate_quiz_from_text(text, num_questions=5):
         return f"Error generating quiz: {str(e)}"
 
 
-# Home page route
-@app.route('/')
-@app.route('/home')
-def home_page():
-    return render_template('quiz.html')  # Adjust to quiz.html from Vite
-
 # Quiz generation route
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
@@ -173,6 +167,11 @@ def submit_quiz():
         "score": score,
         "result": result
     })
+
+# Default route to indicate the backend is running
+@app.route('/')
+def index():
+    return jsonify({"message": "Backend is running. Use the API endpoints for functionality."})
 
 # Run the app
 if __name__ == "__main__":

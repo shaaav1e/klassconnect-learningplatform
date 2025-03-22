@@ -1,35 +1,184 @@
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+/* Quiz Section */
+#quizSection {
+  display: none;
+  margin-top: 2em;
+  background-color: #f9f9f9;
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.question {
-    margin-bottom: 30px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+/* Use flex-column from style.css instead of redefining */
+/* #quizForm {
+  display: flex;
+  flex-direction: column;
+} */
+
+.quiz-question {
+  margin-bottom: 1.5em;
 }
 
-.question p {
-    margin-bottom: 10px;
+.quiz-question label {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+  color: #444;
 }
 
-input[type="radio"],
-input[type="text"] {
-    margin: 5px;
-    padding: 5px;
+.quiz-question input {
+  padding: 12px;
+  font-size: 1em;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+  margin-top: 8px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.quiz-question input:focus {
+  border-color: #6a5acd;
+  outline: none;
 }
 
-button:hover {
-    background-color: #45a049;
+/* Quiz Options (radio buttons) - fixing the spacing issue */
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+
+.option-item {
+  padding: 0.8em;
+  border-radius: 6px;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.option-item:hover {
+  background-color: #e0e0e0;
+}
+
+/* Ensure radio buttons are properly aligned with text */
+.option-item input[type="radio"] {
+  margin-right: 10px;
+  margin-left: 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* Make label take up remaining space and align properly */
+.option-item label {
+  cursor: pointer;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+/* Submit Quiz Button - use btn class from style.css with customization */
+#submitQuiz {
+  /* btn class already handles most of this */
+  background-color: #6a5acd;
+  transition: background-color 0.3s ease;
+  color: white;
+  padding: 14px 28px;
+  font-size: 1.1em;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 1.5em;
+  border: none;
+}
+
+#submitQuiz:hover {
+  background-color: #5a4ba0;
+  opacity: 1; /* Override the btn:hover opacity */
+}
+
+/* Loading Spinner */
+.loading-container {
+  /* Use flex-column and flex-center classes from style.css */
+  margin: 2em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #6a5acd;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1em;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-container p {
+  color: #555;
+  font-size: 1.1em;
+}
+
+/* Results Section */
+#resultsSection {
+  margin-top: 2em;
+  background-color: #f9f9f9;
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score-container {
+  font-size: 1.3em;
+  margin-bottom: 1.5em;
+  font-weight: bold;
+  color: #333;
+  /* Use text-center class from style.css */
+  padding: 1em;
+  background-color: #e8e8ff;
+  border-radius: 8px;
+  text-align: center;
+}
+
+#resultDetails {
+  margin-top: 1.5em;
+}
+
+.result-item {
+  margin-bottom: 1.5em;
+  padding: 1em;
+  border-radius: 8px;
+}
+
+.result-item.correct {
+  background-color: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid #4CAF50;
+}
+
+.result-item.incorrect {
+  background-color: rgba(244, 67, 54, 0.1);
+  border-left: 4px solid #F44336;
+}
+
+.result-item h3 {
+  margin-top: 0;
+  color: #444;
+}
+
+#retakeQuiz {
+  margin-top: 1.5em;
+  width: 100%;
 }

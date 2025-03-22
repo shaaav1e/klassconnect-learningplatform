@@ -1,24 +1,94 @@
-<!-- src/index.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz Generator</title>
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/css/quiz.css" />
   </head>
   <body>
-    <h1>Upload a PDF to Generate Quiz</h1>
-    <form id="uploadForm">
-      <input type="file" id="fileInput" name="file" accept=".pdf" required />
-      <label for="num_questions">Number of Questions:</label>
-      <input type="number" id="num_questions" name="num_questions" value="5" required />
-      <button type="submit">Upload and Generate Quiz</button>
-    </form>
+    <nav>
+      <div class="dash-nav flex-row flex-between flex-center pt-1">
+        <div class="dash-left">
+          <a href="/index.html">
+            <h2>KlassConnect</h2>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <!-- <div class="right-dash">
+          <div class="flex-row user-profile flex-center gap-logout">
+            <img src="/src/login.jpg" alt="login" class="login-photo">
+            <div class="user-name">Shawaiz</div>
+            <button class="logout-btn" id="logout">
+            <ion-icon name="caret-down-outline"></ion-icon>
+          </button>
+          </div>
+        </div>
+      </div>
+      </nav>
+      <div class="logout-modal">
+        <span class="logout-text">Logout</span>
+       </div> -->
 
-    <div id="quizSection" style="display: none;">
-      <h2>Quiz</h2>
-      <form id="quizForm"></form>
-      <button id="submitQuiz">Submit Quiz</button>
+    <div class="container pt-3">
+      <h1>Upload a PDF to Generate Quiz</h1>
+
+      <form id="uploadForm" class="flex-column justify">
+        <div class="form-group">
+          <input
+            type="file"
+            id="fileInput"
+            name="file"
+            accept=".pdf"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="num_questions">Number of Questions:</label>
+          <input
+            type="number"
+            id="num_questions"
+            name="num_questions"
+            value="5"
+            required
+          />
+        </div>
+        <button type="submit" class="btn">Upload and Generate Quiz</button>
+      </form>
+
+      <!-- Loading Spinner -->
+      <div
+        id="loadingSpinner"
+        class="loading-container flex-column flex-center"
+        style="display: none"
+      >
+        <div class="spinner"></div>
+        <p>Generating quiz questions...</p>
+      </div>
+
+      <div id="quizSection" style="display: none">
+        <h2>Quiz</h2>
+        <form id="quizForm" class="flex-column">
+          <!-- Options will be dynamically added here by JavaScript -->
+        </form>
+        <button id="submitQuiz" class="btn">Submit Quiz</button>
+      </div>
+
+      <!-- Quiz Results Section -->
+      <div id="resultsSection" style="display: none">
+        <h2>Quiz Results</h2>
+        <div class="score-container text-center">
+          <p>
+            Your score: <span id="userScore">0</span>/<span id="totalQuestions"
+              >0</span
+            >
+          </p>
+        </div>
+        <div id="resultDetails"></div>
+        <button id="retakeQuiz" class="btn">Take Another Quiz</button>
+      </div>
     </div>
 
     <script type="module" src="/src/js/quiz.js"></script>

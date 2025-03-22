@@ -1,0 +1,243 @@
+1) HTML CODE OF SIDEBAR OF DASHBOARD.HTML:
+_________________________________________________________
+<!-- DASHBOARD -->
+ <section class="dashboard flex-row">
+  <div class="left-section pt-2">
+   <ul class="dashboard-ul flex-column align">
+    <li>
+      <button class="sidebar-btn dash flex-row align">
+      <ion-icon name="home-outline"></ion-icon>
+        Dashboard</button>
+    </li>
+    <li>
+      <button class="sidebar-btn dash flex-row align">
+      <ion-icon name="list-circle-outline"></ion-icon>
+        Assignments</button>
+    </li>
+    <li>
+      <button class="sidebar-btn dash flex-row align">
+      <ion-icon name="stats-chart-outline"></ion-icon>
+        Stats</button>
+    </li>
+    <li>
+      <button class="sidebar-btn dash course flex-row align" id="loadCourses">
+        <ion-icon name="book-outline"></ion-icon>
+        Courses</button>
+    </li>
+    <li>
+      <button class="sidebar-btn dash flex-row align | enrolled">
+      <ion-icon name="book-outline"></ion-icon>
+        Enrolled Courses</button>
+    </li>
+   </ul>
+   </div>
+   <div class="right-sec">
+    <div class="dashboard-content"></div> <!-- This will hold the dynamically loaded courses -->
+_________________________________________________________
+Course Section of index.html:
+<!-- COURSES -->
+    <section class="courses pt-2" id="courses">
+      <div class="container">
+        <div class="course-text" | data-aos="zoom-in">
+          <h2 class="text-center">Popular <span>Courses</span></h2>
+          <p class="text-center courses-para">Our Project Based Courses</p>
+        </div>
+        <div class="courses-card flex-row flex-center wrap mb-2 pt-2" | data-aos="zoom-out">
+          <div class="course-card onee flex-column flex-center">
+            <img src="/src/web2.webp" alt="Web Development">
+            <h3>Web Development</h3>
+            <p>Build your first responsive website.</p>
+            <p class="price">3000 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn html-btn" data-course="HTMLCourse">Enroll Now</button>
+          </div>
+          <div class="course-card twoo flex-column flex-center">
+            <img src="/src/mobile2.jpg" alt="Mobie Application Development">
+            <h3>Mobile Application Development</h3>
+            <p>Build your first app.</p>
+            <p class="price">3500 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card three flex-column flex-center">
+            <img src="/src/python2.gif" alt="Python">
+            <h3>Introduction to Python</h3>
+            <p>Get Started with Python.</p>
+            <p class="price">2500 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card four flex-column flex-center">
+            <img src="/src/datascience.webp" alt="Data Science">
+            <h3>Introduction to Data Science</h3>
+            <p>Get Started with Data Science.</p>
+            <p class="price">4500 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card five flex-column flex-center">
+            <img src="/src/ai.jpg" alt="Artificial Intelligence">
+            <h3>Introduction to Artifical Intelligence</h3>
+            <p>Get Started with Basics of AI.</p>
+            <p class="price">6000 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+          <div class="course-card six flex-column flex-center">
+            <img src="/src/react2.png" alt="React">
+            <h3>Introduction to React</h3>
+            <p>Build your first website using React.</p>
+            <p class="price">7000 PKR</p>
+            <div class="icons flex-row flex-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+
+            </div>
+            <button class="btn">Enroll Now</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+_________________________________________________________
+2) JS CODE:
+const coursesButton = document.querySelector('.sidebar-btn.dash.course');
+
+coursesButton.addEventListener('click', loadCourses);
+
+async function loadCourses() {
+  try {
+    document.querySelector(".dashboard-content").innerHTML = "<p>Loading...</p>";
+
+    const response = await fetch("index.html");
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const coursesSection = doc.querySelector("section.courses");
+
+    if (coursesSection) {
+      const heading = coursesSection.querySelector(".course-text h2");
+      const paragraph = coursesSection.querySelector(".course-text p");
+
+      if (heading) heading.remove();
+      if (paragraph) paragraph.remove();
+      coursesSection.classList.remove("pt-2");
+    }
+
+    document.querySelector(".dashboard-content").innerHTML = coursesSection.outerHTML;
+
+    // Attach enroll button listeners
+    attachEnrollEventListeners();
+
+  } catch (error) {
+    console.error("Failed to load courses:", error);
+    document.querySelector(".dashboard-content").innerHTML = "<p>Error loading content.</p>";
+  }
+}
+
+function attachEnrollEventListeners() {
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+
+    const userId = user.uid;
+    const userDocRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userDocRef);
+    let enrolledCourses = [];
+
+    if (userDoc.exists()) {
+      enrolledCourses = userDoc.data().enrolledCourses || [];
+    }
+
+    document.querySelector(".dashboard-content").addEventListener("click", async (event) => {
+      if (event.target.classList.contains("enroll-btn")) {
+        const courseName = event.target.dataset.course;
+
+        if (!enrolledCourses.includes(courseName)) {
+          // Enroll user in the course
+          await updateDoc(userDocRef, {
+            enrolledCourses: arrayUnion(courseName),
+          });
+
+          enrolledCourses.push(courseName); // Update local state
+
+          event.target.textContent = "Access Course";
+          event.target.classList.add("access-course");
+
+          moveToEnrolledSection(courseName);
+        } else {
+          window.location.href = `/${courseName.toLowerCase()}.html`;
+        }
+      }
+    });
+  });
+}
+
+function moveToEnrolledSection(courseName) {
+  const enrolledSection = document.querySelector(".dashboard-content");
+  const enrolledDiv = document.createElement("div");
+  enrolledDiv.classList.add("enrolled-course");
+  enrolledDiv.innerHTML = `
+    <p>${courseName}</p>
+    <button class="access-course-btn" data-course="${courseName}">Access Course</button>
+  `;
+
+  enrolledSection.appendChild(enrolledDiv);
+
+  enrolledDiv.querySelector(".access-course-btn").addEventListener("click", () => {
+    window.location.href = `/${courseName.toLowerCase()}.html`;
+  });
+}
+
+// Load Enrolled Courses on Page Load
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  const userId = user.uid;
+  const userDocRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userDocRef);
+
+  if (userDoc.exists() && userDoc.data().enrolledCourses) {
+    userDoc.data().enrolledCourses.forEach(moveToEnrolledSection);
+  }
+});
+
+// Ensure loadCourses function runs when button exists
+const loadCoursesBtn = document.querySelector("#loadCourses");
+if (loadCoursesBtn) {
+  loadCoursesBtn.addEventListener("click", loadCourses);
+}
+
+
+4) 
