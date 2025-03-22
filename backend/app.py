@@ -4,17 +4,21 @@ import requests
 import json
 import os
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+# Simplified env loading - revert to a more reliable approach
+load_dotenv()  # This will look for .env in the current directory
 
 # Set up the Flask app
 app = Flask(__name__,
             static_folder="../",  # This points to your main directory where static files are (Vite folder)
             template_folder="../")  # This points to your main directory where HTML templates are (Vite folder)
 
-# Enable CORS
-CORS(app, origins="http://localhost:5176")  # Ensure the port here matches Vite’s port
+# Enable CORS - Update the port to match the frontend's port (5176)
+CORS(app, origins=["http://localhost:5176", "https://klassconnect.netlify.app"])
 
-# OpenRouter API Key
-API_KEY = "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"
+# OpenRouter API Key - Use the hardcoded value as fallback if env variable fails
+API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 # Store the correct answers globally (for simplicity)
 correct_answers = []
@@ -175,4 +179,5 @@ def index():
 
 # Run the app
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
