@@ -1,4 +1,9 @@
-const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+// Determine backend URL based on environment
+const isProd = window.location.hostname !== "localhost";
+const BACKEND_URL = isProd
+  ? import.meta.env.VITE_BACKEND_URL_PROD ||
+    "https://klassconnect-backend.onrender.com"
+  : import.meta.env.VITE_BACKEND_URL_DEV || "http://localhost:10000";
 
 document.addEventListener("DOMContentLoaded", function () {
   const uploadForm = document.getElementById("uploadForm");

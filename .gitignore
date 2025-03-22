@@ -5,10 +5,10 @@
 .env.test.local
 .env.production.local
 
-
-
-
-
-# Node
+# Node modules
 node_modules/
+
+# Build directories
+/dist
+/build
 

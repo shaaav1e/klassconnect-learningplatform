@@ -177,10 +177,20 @@ def submit_quiz():
 def index():
     return jsonify({"message": "Backend is running. Use the API endpoints for functionality."})
 
+# Add a debug route to check backend connectivity
+@app.route('/status', methods=['GET'])
+def status():
+    """Endpoint to check backend status"""
+    return jsonify({
+        "status": "online",
+        "api_key_configured": bool(API_KEY),
+        "environment": os.environ.get("FLASK_ENV", "production")
+    })
+
 # Run the app
 if __name__ == "__main__":
     # Get port from environment variable with fallback to 5000 (Render's preferred default)
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 10000))  # Changed default to 10000 to match .env
     print(f"Starting server on port {port}")  # Add explicit logging
     # Explicitly bind to 0.0.0.0 to listen on all network interfaces
-    app.run(host="0.0.0.0", port=port, debug=False)  # Disable debug mode in production
+    app.run(host="0.0.0.0", port=port, debug=True)  # Enable debug mode for local development

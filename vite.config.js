@@ -2,9 +2,16 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   server: {
-    host: "localhost", // Optional, but recommended
-    port: 5176, // Keep your development port
-    // Remove the proxy configuration as we'll use absolute URLs
+    host: "localhost",
+    port: 5176,
+    proxy: {
+      // Add proxy for local development
+      "/api": {
+        target: "http://localhost:10000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
   build: {
     rollupOptions: {
