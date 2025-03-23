@@ -17,7 +17,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html",
-        signup: "signup.html",
         dashboard: "dashboard.html",
         quiz: "quiz.html",
         login: "login.html",
