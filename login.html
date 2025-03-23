@@ -1,90 +1,118 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KlassConnect</title>
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="icon" href="/src/KlassConnect logo.svg" type="image/png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lora:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KlassConnect</title>
-  <link rel="stylesheet" href="/src/css/style.css">
-  <link rel="icon" href="/src/KlassConnect logo.svg" type="image/png">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lora:wght@400;700&display=swap"
-    rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"
+    ></script>
+  </head>
 
-  <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="flex-row flex-evenly pt-1 flex-center wrap">
+      <ul class="logo nav-left">
+        <a href="/index.html">
+          <h2>KlassConnect</h2>
+        </a>
+      </ul>
+      <ul class="nav-links nav-mid flex-row sm-gap">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#">Dashboard</a></li>
+      </ul>
+      <ul class="nav-right flex-row sm-gap">
+        <div class="">
+          <a href="/login.html" class="login-btn flex-row">Login</a>
+        </div>
+      </ul>
+    </nav>
 
-</head>
-
-<body>
-  <!-- NAVBAR -->
-  <nav class="flex-row flex-evenly pt-1 flex-center wrap">
-    <ul class="logo nav-left">
-      <a href="/index.html">
-        <h2>KlassConnect</h2>
-      </a>
-    </ul>
-    <ul class="nav-links nav-mid flex-row sm-gap">
-      <li><a href="/index.html">Home</a></li>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#courses">Courses</a></li>
-      <li><a href="#">Dashboard</a></li>
-    </ul>
-    <ul class="nav-right flex-row sm-gap">
-      <!-- <div class="flex-row flex-center icon-gap">
-        <ion-icon name="lock-closed-outline"></ion-icon>
-        <li><a href="/signup.html">Sign Up</a></li>
-      </div> -->
-      <div class="">
-        <button class="login-btn flex-row ">
-          <a href="/login.html">
-            <!-- <ion-icon name="lock-open-outline"></ion-icon> -->
-            Login</a></button>
-      </div>
-    </ul>
-</nav>
-
-  <section class="pt-1 flex-center bg-gray-50 pb-2">
-    <div class="login-container">
+    <section class="pt-1 flex-center bg-gray-50 pb-2">
+      <div class="login-container">
         <div class="login-form">
-            <h2 class="text-center">KLASSCONNECT - lOGIN</h2>
-            <form>
-                <div class="form-group">
-                    <label for="email" >Email</label>
-                    <input type="email" id="email" placeholder="Enter email provided by Admin"  />
-                </div>
-                <div class="form-group">
-                    <label for="password" >Password</label>
-                    <input type="password" id="password" placeholder="Don't forget to turn Capslock off" />
-                </div>
-                <div class="form-group">
-                    <label for="role" >Role</label>
-                    <select id="role">
-                        <option value="Teacher">Teacher</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Student">Student</option>
-                    </select>
-                </div>
-                <div class="flex-row">
-                <button type="submit" id="google-login" class="login-btn mt-2 flex flex-center">
-                    <!-- <ion-icon class="google-icon" name="logo-google"></ion-icon>  -->
-                    Login with Google
-                </button>
-                <button type="submit" id="email-login" class="login-btn mt-2 flex flex-center">
-                  <!-- <ion-icon class="google-icon" name="logo-google"></ion-icon>  -->
-                  Login with Email
+          <h2 class="text-center">KLASSCONNECT - lOGIN</h2>
+          <form>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter email provided by Admin"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Don't forget to turn Capslock off"
+              />
+            </div>
+            <div class="form-group">
+              <label for="role">Role</label>
+              <select id="role">
+                <option value="Teacher">Teacher</option>
+                <option value="Admin">Admin</option>
+                <option value="Student">Student</option>
+              </select>
+            </div>
+            <div
+              id="authMessage"
+              class="auth-message"
+              style="
+                display: none;
+                text-align: center;
+                margin: 10px 0;
+                padding: 8px;
+                border-radius: 4px;
+              "
+            ></div>
+            <div class="flex-row">
+              <button
+                type="button"
+                id="google-login"
+                class="login-btn mt-2 flex flex-center"
+              >
+                Login with Google
+              </button>
+              <button
+                type="button"
+                id="email-login"
+                class="login-btn mt-2 flex flex-center"
+              >
+                Login with Email
               </button>
             </div>
-            </form>
+          </form>
         </div>
         <div class="login-image">
-            <img src="./src/login.webp" alt="KlassConnect">
+          <img src="./src/login.webp" alt="KlassConnect" />
         </div>
-    </div>
-  </section>
-<script type="module" src="/src/js/main.js"></script>
-</body>
+      </div>
+    </section>
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
 </html>

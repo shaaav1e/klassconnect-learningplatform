@@ -1,61 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HTML & CSS Course | KlassConnect</title>
-    <link rel="stylesheet" href="/src/css/style.css">
-    <script type="module" type="text/javascript" src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.js"></script>
-</head>
-<body>
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/css/htmlcourse.css" />
+    <script
+      type="module"
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.js"
+    ></script>
+  </head>
+  <body>
+    <!-- Course Header -->
+    <header class="course-header">
+      <a href="/dashboard.html" class="back-to-dashboard">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Back to Dashboard
+      </a>
+      <div class="logo">
+        <h2>KlassConnect</h2>
+      </div>
+    </header>
+
     <div class="course-container flex-row">
-        <!-- Sidebar -->
-        <aside class="course-sidebar" id="courseSidebar">
-            <div class="sidebar-header flex-row flex-between align">
-                <h2>Course Content</h2>
-                <button class="toggle-sidebar" id="toggleSidebar">
-                    <ion-icon name="menu-outline"></ion-icon>
-                </button>
-            </div>
-            
-            <!-- Progress Bar -->
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress" id="courseProgress"></div>
-                </div>
-                <span class="progress-text">0% Complete</span>
-            </div>
+      <!-- Sidebar -->
+      <aside class="course-sidebar" id="courseSidebar">
+        <div class="sidebar-header flex-row flex-between align">
+          <h2>Course Content</h2>
+          <button class="toggle-sidebar" id="toggleSidebar">
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+        </div>
 
-            <!-- Chapter List -->
-            <ul class="chapter-list" id="chapterList">
-                <!-- Chapters will be dynamically inserted here -->
-            </ul>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress" id="courseProgress"></div>
+          </div>
+          <span class="progress-text">0% Complete</span>
+        </div>
 
-            <!-- Resize Handle -->
-            <div class="resize-handle" id="resizeHandle"></div>
-        </aside>
+        <!-- Chapter List -->
+        <ul class="chapter-list" id="chapterList">
+          <!-- Chapters and topics will be dynamically inserted here -->
+        </ul>
+      </aside>
 
-        <!-- Main Content -->
-        <main class="course-content" id="courseContent">
-            <div class="content-container">
-                <!-- Content will be dynamically loaded here -->
-            </div>
+      <!-- Main Content -->
+      <main class="course-content" id="courseContent">
+        <div class="content-container">
+          <!-- Content dynamically loaded here -->
+        </div>
 
-            <!-- Navigation -->
-            <div class="navigation-controls flex-row flex-between">
-                <button class="btn nav-btn" id="prevBtn">
-                    <ion-icon name="arrow-back-outline"></ion-icon> Previous
-                </button>
-                <button class="btn nav-btn" id="nextBtn">
-                    Next <ion-icon name="arrow-forward-outline"></ion-icon>
-                </button>
-            </div>
-        </main>
+        <!-- Navigation -->
+        <div class="navigation-controls flex-row flex-between">
+          <button class="btn nav-btn" id="prevBtn">
+            <ion-icon name="arrow-back-outline"></ion-icon> Previous
+          </button>
+          <button class="btn nav-btn" id="nextBtn">
+            Next <ion-icon name="arrow-forward-outline"></ion-icon>
+          </button>
+        </div>
+      </main>
     </div>
     <script type="module" src="/src/js/htmlcourse/sidebar.js"></script>
-    <script type="module" src="/src/js/htmlcourse/codeEditor.js"></script>
     <script type="module" src="/src/js/htmlcourse/progress.js"></script>
     <script type="module" src="/src/js/htmlcourse/navigation.js"></script>
-</body>
+    <script type="module">
+      import navigation from "/src/js/htmlcourse/navigation.js";
+
+      // Listen for topic load events
+      const contentContainer = document.querySelector(".content-container");
+      contentContainer.addEventListener("loadTopic", (e) => {
+        const topicId = e.detail;
+        navigation.loadTopic(topicId);
+      });
+    </script>
+    <script type="module">
+      // Make sure navigation is initialized before topic clicks
+      document.addEventListener("DOMContentLoaded", () => {
+        // Listen for direct topic clicks
+        document.querySelectorAll(".topic-item").forEach((item) => {
+          item.addEventListener("click", (e) => {
+            const topicId = e.target.dataset.topic;
+            if (topicId && window.navigation) {
+              window.navigation.loadTopic(topicId);
+            }
+          });
+        });
+      });
+    </script>
+    <script type="module">
+      import navigation from "/src/js/htmlcourse/navigation.js";
+      import sidebar from "/src/js/htmlcourse/sidebar.js";
+
+      // Ensure navigation and sidebar are initialized
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("Initializing navigation and sidebar...");
+        navigation.loadLastVisitedTopic(); // Load the last visited topic on page load
+      });
+    </script>
+  </body>
 </html>

@@ -37,7 +37,7 @@ def extract_text_from_pdf(pdf_path):
 def generate_quiz_from_text(text, num_questions=5):
     """Generate MCQs using OpenRouter API."""
     prompt = (
-        f"Generate {num_questions} multiple-choice questions (MCQs) from the following text. Extract important topics and make appropriate questions. The pdf content is a course outline and design quiz for university level students.\n"
+        f"Generate {num_questions} multiple-choice questions (MCQs) from the following text. Extract important topics and make appropriate questions from your knowledge. The questions should be a mix of beginner to intermediate. If the pdf content is a course outline then design quiz based on contents, the pdf is just a guide for the topics to be involved.\n"
         f"Each question should have 4 answer options and clearly indicate the correct answer.\n\n"
         f"Text:\n{text[:2000]} \n\n"
         f"Format: Return a JSON array with 'question', 'options' (list of 4), and 'answer'."  # 'answer' should be the correct answer

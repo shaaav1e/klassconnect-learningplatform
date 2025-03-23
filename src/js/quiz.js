@@ -27,13 +27,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const formData = new FormData(uploadForm);
 
+    // Check if there's a file selected
+    const fileInput = uploadForm.querySelector('input[type="file"]');
+    if (fileInput && (!fileInput.files || fileInput.files.length === 0)) {
+      loadingSpinner.style.display = "none";
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    // Add timeout and better error handling for mobile devices
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+
+    console.log("Starting file upload...");
+
     fetch(`${BACKEND_URL}/upload`, {
       method: "POST",
       body: formData,
+      signal: controller.signal,
+      // Don't set Content-Type header manually when using FormData
+      // as the browser will set it with the correct boundary
     })
       .then((response) => {
+        clearTimeout(timeoutId);
+        console.log("Response status:", response.status);
+        console.log("Response headers:", [...response.headers.entries()]);
+
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          console.error(
+            "Error response:",
+            response.status,
+            response.statusText
+          );
+          return response.text().then((text) => {
+            try {
+              // Try to parse as JSON first
+              const errorData = JSON.parse(text);
+              throw new Error(
+                `Server error (${response.status}): ${
+                  errorData.error || errorData.message || "Unknown error"
+                }`
+              );
+            } catch (e) {
+              // If not JSON, use the text directly
+              throw new Error(
+                `Server error (${response.status}): ${
+                  text || response.statusText
+                }`
+              );
+            }
+          });
         }
         return response.json();
       })
@@ -42,10 +85,16 @@ document.addEventListener("DOMContentLoaded", function () {
         loadingSpinner.style.display = "none";
 
         if (data.error) {
+          console.error("API returned error:", data.error);
           alert("Error: " + data.error);
           return;
         }
 
+        console.log(
+          "Quiz generated successfully with",
+          data.mcqs.length,
+          "questions"
+        );
         currentQuiz = data.mcqs;
         displayQuiz(currentQuiz);
 
@@ -56,8 +105,18 @@ document.addEventListener("DOMContentLoaded", function () {
         quizSection.scrollIntoView({ behavior: "smooth" });
       })
       .catch((error) => {
+        clearTimeout(timeoutId);
         loadingSpinner.style.display = "none";
-        alert("Error: " + error.message);
+
+        console.error("Fetch error:", error);
+
+        if (error.name === "AbortError") {
+          alert(
+            "Request timed out. Please check your connection and try again."
+          );
+        } else {
+          alert("Error: " + error.message);
+        }
       });
   });
 
@@ -83,9 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Create a wrapper for the radio button and label to ensure proper alignment
         const radioWrapper = document.createElement("div");
-        radioWrapper.style.display = "flex";
-        radioWrapper.style.alignItems = "center";
-        radioWrapper.style.width = "100%";
+        radioWrapper.className = "radio-wrapper";
 
         const radio = document.createElement("input");
         radio.type = "radio";
@@ -93,14 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
         radio.value = option;
         radio.id = `q${index}-opt${optIndex}`;
         radio.setAttribute("data-question", q.question);
-        radio.style.marginRight = "10px";
+        radio.className = "quiz-radio";
 
         const optionLabel = document.createElement("label");
         optionLabel.textContent = option;
         optionLabel.htmlFor = `q${index}-opt${optIndex}`;
-        optionLabel.style.flex = "1";
-        optionLabel.style.margin = "0";
-        optionLabel.style.cursor = "pointer";
+        optionLabel.className = "option-label";
 
         radioWrapper.appendChild(radio);
         radioWrapper.appendChild(optionLabel);

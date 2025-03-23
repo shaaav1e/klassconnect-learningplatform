@@ -1,33 +1,96 @@
-body
-{
+body {
     font-family: 'Poppins', sans-serif;
-}
-/* Course Layout */
-.course-container {
-    height: 100vh;
-    overflow: hidden;
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* Sidebar Styles */
+/* ============= HEADER STYLES ============= */
+.course-header {
+    background: var(--primary-gradient); /* Updated to use the gradient */
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    color: white; /* Ensure text is readable on gradient */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-dashboard {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white; /* Updated for better contrast */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.back-to-dashboard:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Subtle hover effect */
+}
+
+.logo h2 {
+    margin: 0;
+    font-size: 1.5rem; /* Slightly larger for better visibility */
+    font-weight: 600;
+    color: white; /* Ensure logo text is readable */
+}
+
+/* ============= COURSE LAYOUT ============= */
+.course-container {
+    height: calc(100vh - 60px);
+    overflow: hidden;
+    display: flex;
+}
+
+/* ============= SIDEBAR STYLES ============= */
 .course-sidebar {
     width: 300px;
     min-width: 200px;
     max-width: 500px;
     height: 100%;
-    background: var(--verylight);
+    background: var(--verylight, #f9f9f9);
     border-right: 1px solid rgba(0,0,0,0.1);
     position: relative;
     transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-header {
     padding: 1rem;
     border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #5a4ba0;
 }
 
 .toggle-sidebar {
     padding: 0.5rem;
-    color: var(--dark);
+    color: var(--dark, #333);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-sidebar:hover {
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
 }
 
 /* Progress Bar */
@@ -45,7 +108,7 @@ body
 
 .progress {
     height: 100%;
-    background: var(--light);
+    background: var(--light, #6a5acd);
     transition: width 0.3s ease;
 }
 
@@ -54,13 +117,17 @@ body
     text-align: center;
     margin-top: 0.5rem;
     font-family: 'Poppins', sans-serif;
-    color: var(--dark);
+    color: var(--dark, #333);
+    font-size: 0.875rem;
 }
 
 /* Chapter List */
 .chapter-list {
     overflow-y: auto;
     height: calc(100% - 150px);
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .chapter-item {
@@ -70,7 +137,11 @@ body
 .chapter-header {
     padding: 1rem;
     cursor: pointer;
-    color: var(--dark);
+    color: var(--dark, #333);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
 }
 
 .chapter-header:hover {
@@ -87,7 +158,9 @@ body
 
 .topic-list {
     display: none;
-    padding-left: 1rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
     background: rgba(0,0,0,0.02);
 }
 
@@ -96,24 +169,33 @@ body
 }
 
 .topic-item {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1rem 0.75rem 2rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+    border-left: 3px solid transparent;
 }
 
 .topic-item:hover {
     background: rgba(0,0,0,0.05);
 }
 
-.topic-item.completed {
-    color: var(--light);
+.topic-item.completed ion-icon {
+    color: #4CAF50;
 }
 
 .topic-item.active {
-    background: var(--light);
-    color: white;
+    background: rgba(106, 90, 205, 0.1);
+    color: #5a4ba0;
+    border-left: 3px solid #5a4ba0;
+}
+
+.completion-icon {
+    color: #ccc;
+    font-size: 1.2rem;
 }
 
 /* Resize Handle */
@@ -124,9 +206,10 @@ body
     width: 10px;
     height: 100%;
     cursor: ew-resize;
+    z-index: 5;
 }
 
-/* Main Content */
+/* ============= MAIN CONTENT STYLES ============= */
 .course-content {
     flex: 1;
     height: 100%;
@@ -134,69 +217,132 @@ body
     background: white;
 }
 
+/* Content Container */
 .content-container {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 2rem; /* Consistent padding for all sections */
+    max-width: 900px;
+    margin: 0 auto; /* Center align content */
+    box-sizing: border-box; /* Ensure padding is included in width */
 }
 
-/* Code Editor */
-.code-editor {
-    background: #1e1e1e;
-    border-radius: 8px;
-    margin: 1rem 0;
+/* Ensure headings and paragraphs have consistent spacing */
+.content-container h1,
+.content-container h2,
+.content-container h3 {
+    margin-top: 1.5rem; /* Consistent spacing for headings */
+    margin-bottom: 1rem;
+    color: #5a4ba0; /* Consistent heading color */
 }
 
-.code-editor-header {
-    padding: 0.5rem 1rem;
-    background: #2d2d2d;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
+.content-container p {
+    margin-bottom: 1.5rem; /* Consistent paragraph spacing */
+    font-size: 1rem;
+    line-height: 1.7;
 }
 
-.editor-btn {
-    padding: 0.25rem 0.5rem;
-    color: #fff;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+/* Ensure lists have consistent spacing */
+.content-container ul,
+.content-container ol {
+    margin: 1rem 0; /* Consistent list spacing */
+    padding-left: 1.5rem; /* Indent lists */
 }
 
-.editor-btn:hover {
-    background: rgba(255,255,255,0.1);
+.content-container li {
+    margin-bottom: 0.5rem; /* Consistent spacing between list items */
 }
 
-.code-editor-content {
+/* Ensure code blocks have consistent spacing */
+.content-container pre {
+    margin: 1.5rem 0; /* Consistent spacing for code blocks */
     padding: 1rem;
-    color: #fff;
-    font-family: monospace;
-    white-space: pre-wrap;
+    background: #f9f9f9;
+    border-left: 4px solid #6a5acd;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    overflow-x: auto;
 }
 
-/* Navigation Controls */
+/* Remove unnecessary margins for nested elements */
+.content-container .exercise-container {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f5f5f5;
+    border-left: 4px solid #6a5acd;
+    border-radius: 0 8px 8px 0;
+}
+
+.content-container .exercise-container h3 {
+    margin-top: 0;
+    color: #5a4ba0;
+}
+
+/* Remove extra padding/margin for nested sections */
+.content-container .code-example {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-left: 4px solid #6a5acd;
+    border-radius: 8px;
+}
+
+/* Ensure consistent spacing for navigation controls */
 .navigation-controls {
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     border-top: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
 }
 
+/* Ensure buttons have consistent spacing */
 .nav-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: #6a5acd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-/* Responsive */
+.nav-btn:hover {
+    background: #5a4ba0;
+}
+
+.nav-btn:disabled {
+    background: #d1d1d1;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* ============= EXERCISE STYLES ============= */
+.exercise-container {
+    background: #f5f5f5;
+    border-left: 4px solid #6a5acd;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.exercise-container h3 {
+    margin-top: 0;
+    color: #5a4ba0;
+}
+
+/* ============= RESPONSIVE STYLES ============= */
 @media (max-width: 768px) {
     .course-sidebar {
         position: absolute;
         left: 0;
+        top: 60px;
         z-index: 10;
         transform: translateX(-100%);
+        height: calc(100vh - 60px);
     }
 
     .course-sidebar.show {
@@ -206,4 +352,45 @@ body
     .resize-handle {
         display: none;
     }
+    
+    .content-container {
+        padding: 1.5rem; /* Adjust padding for smaller screens */
+    }
+    
+    .navigation-controls {
+        padding: 1rem;
+    }
 }
+
+/* ============= CODE EXAMPLE STYLES ============= */
+.code-example {
+    background: #f9f9f9; /* Light background for better readability */
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    padding: 1rem; /* Added padding for spacing */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #6a5acd; /* Accent border */
+}
+
+.code-title {
+    font-weight: 600;
+    color: #5a4ba0; /* Accent color for title */
+    margin-bottom: 0.5rem;
+}
+
+.code-content {
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #333; /* Dark text for readability */
+    white-space: pre-wrap;
+    overflow-x: auto;
+    tab-size: 4;
+}
+
+/* Add syntax highlighting colors */
+.code-content .keyword { color: #07a; }
+.code-content .string { color: #690; }
+.code-content .comment { color: #999; }
+.code-content .tag { color: #905; }
+.code-content .attr { color: #07a; }
