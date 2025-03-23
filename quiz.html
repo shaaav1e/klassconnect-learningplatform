@@ -125,10 +125,136 @@
           style="margin-top: 10px; font-size: 0.9em"
         ></div>
       </div>
+
+      <!-- Add additional troubleshooting options -->
+      <div id="troubleshoot" style="margin-top: 20px; display: none">
+        <button
+          id="checkDirectConnection"
+          class="btn"
+          style="background-color: #f0f0f0; color: #333"
+        >
+          Check Direct Connection
+        </button>
+        <button
+          id="checkProxyConnection"
+          class="btn"
+          style="background-color: #f0f0f0; color: #333"
+        >
+          Try API Proxy
+        </button>
+        <a
+          href="ping-test.html"
+          target="_blank"
+          class="btn"
+          style="
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 5px;
+          "
+        >
+          Advanced Connection Test
+        </a>
+        <div
+          id="connectionResult"
+          style="margin-top: 10px; font-size: 0.9em"
+        ></div>
+      </div>
     </div>
 
     <!-- Use only one script for quiz functionality -->
     <script type="module" src="/src/js/quiz.js"></script>
+
+    <!-- Register service worker for better network resilience -->
+    <script>
+      // Register the service worker if supported
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/src/js/service-worker.js")
+            .then((registration) => {
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              );
+            })
+            .catch((error) => {
+              console.log("ServiceWorker registration failed: ", error);
+            });
+        });
+      }
+
+      // Show the troubleshooting tools if there's a connection issue
+      setTimeout(() => {
+        const statusElement = document.getElementById("backendStatus");
+        const troubleshootDiv = document.getElementById("troubleshoot");
+
+        if (statusElement && statusElement.textContent.includes("❌")) {
+          troubleshootDiv.style.display = "block";
+
+          // Set up the direct connection test
+          document
+            .getElementById("checkDirectConnection")
+            .addEventListener("click", () => {
+              const resultDiv = document.getElementById("connectionResult");
+              resultDiv.innerHTML = "Testing direct connection...";
+              resultDiv.style.color = "#333";
+
+              fetch("https://klassconnect-backend.onrender.com/status", {
+                method: "GET",
+                mode: "cors",
+                credentials: "omit",
+                cache: "no-store",
+              })
+                .then((response) => {
+                  if (!response.ok)
+                    throw new Error(`Status: ${response.status}`);
+                  return response.json();
+                })
+                .then((data) => {
+                  resultDiv.innerHTML = `✅ Direct connection successful! Server status: ${data.status}`;
+                  resultDiv.style.color = "green";
+                  // Reload the page to try again with the successful method
+                  setTimeout(() => window.location.reload(), 2000);
+                })
+                .catch((error) => {
+                  resultDiv.innerHTML = `❌ Direct connection failed: ${error.message}`;
+                  resultDiv.style.color = "red";
+                });
+            });
+
+          // Set up the proxy connection test
+          document
+            .getElementById("checkProxyConnection")
+            .addEventListener("click", () => {
+              const resultDiv = document.getElementById("connectionResult");
+              resultDiv.innerHTML = "Testing connection via API proxy...";
+              resultDiv.style.color = "#333";
+
+              fetch("/api/status", {
+                method: "GET",
+                cache: "no-store",
+              })
+                .then((response) => {
+                  if (!response.ok)
+                    throw new Error(`Status: ${response.status}`);
+                  return response.json();
+                })
+                .then((data) => {
+                  resultDiv.innerHTML = `✅ Proxy connection successful! Server status: ${data.status}`;
+                  resultDiv.style.color = "green";
+                  // Reload the page to try again with the successful method
+                  setTimeout(() => window.location.reload(), 2000);
+                })
+                .catch((error) => {
+                  resultDiv.innerHTML = `❌ Proxy connection failed: ${error.message}`;
+                  resultDiv.style.color = "red";
+                });
+            });
+        }
+      }, 8000); // Show after 8 seconds if there's an issue
+    </script>
 
     <!-- Add network detection helpers -->
     <script>

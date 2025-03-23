@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backend Connection Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .failure {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button:hover {
+        background-color: #0069d9;
+      }
+      pre {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Backend Connection Test</h1>
+    <p>
+      This page tests the connection to the backend server using different
+      methods.
+    </p>
+
+    <div>
+      <button id="directTest">Test Direct Connection</button>
+      <button id="proxyTest">Test via Netlify Proxy</button>
+      <button id="corsAnywhereTest">Test via CORS Anywhere</button>
+    </div>
+
+    <div id="results"></div>
+
+    <h2>Connection Information</h2>
+    <div id="networkInfo">Checking network information...</div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const resultsDiv = document.getElementById("results");
+        const networkInfoDiv = document.getElementById("networkInfo");
+
+        // Display network information
+        function showNetworkInfo() {
+          const info = [];
+
+          info.push(`Online: ${navigator.onLine}`);
+
+          if (navigator.connection) {
+            const conn = navigator.connection;
+            info.push(`Connection Type: ${conn.effectiveType || "unknown"}`);
+            info.push(
+              `Downlink: ${conn.downlink ? conn.downlink + " Mbps" : "unknown"}`
+            );
+            info.push(`RTT: ${conn.rtt ? conn.rtt + " ms" : "unknown"}`);
+            info.push(`Save Data: ${conn.saveData ? "enabled" : "disabled"}`);
+          } else {
+            info.push("Network Information API not available");
+          }
+
+          networkInfoDiv.innerHTML = info.join("<br>");
+        }
+
+        showNetworkInfo();
+
+        // Test function
+        function testConnection(url, name) {
+          const resultEntry = document.createElement("div");
+          resultEntry.className = "result";
+          resultEntry.innerHTML = `Testing <strong>${name}</strong>: ${url} ...`;
+          resultsDiv.prepend(resultEntry);
+
+          const startTime = Date.now();
+
+          fetch(url, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            cache: "no-store",
+            headers: {
+              "Cache-Control": "no-cache",
+              Pragma: "no-cache",
+            },
+          })
+            .then((response) => {
+              const time = Date.now() - startTime;
+
+              if (!response.ok) {
+                throw new Error(`HTTP error ${response.status}`);
+              }
+
+              return response.json().then((data) => {
+                resultEntry.className = "result success";
+                resultEntry.innerHTML = `
+              <strong>${name}</strong>: Success ✅ (${time}ms)<br>
+              Status: ${response.status}<br>
+              <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+              });
+            })
+            .catch((error) => {
+              const time = Date.now() - startTime;
+              resultEntry.className = "result failure";
+              resultEntry.innerHTML = `
+            <strong>${name}</strong>: Failed ❌ (${time}ms)<br>
+            Error: ${error.message}
+          `;
+            });
+        }
+
+        // Button listeners
+        document.getElementById("directTest").addEventListener("click", () => {
+          testConnection(
+            "https://klassconnect-backend.onrender.com/status",
+            "Direct Connection"
+          );
+        });
+
+        document.getElementById("proxyTest").addEventListener("click", () => {
+          testConnection("/api/status", "Netlify Proxy");
+        });
+
+        document
+          .getElementById("corsAnywhereTest")
+          .addEventListener("click", () => {
+            testConnection(
+              "https://cors-anywhere.herokuapp.com/https://klassconnect-backend.onrender.com/status",
+              "CORS Anywhere Proxy"
+            );
+          });
+
+        // Do an initial direct test
+        testConnection(
+          "https://klassconnect-backend.onrender.com/status",
+          "Initial Test"
+        );
+      });
+    </script>
+  </body>
+</html>

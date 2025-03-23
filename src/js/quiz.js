@@ -1,7 +1,14 @@
-// Use a more reliable way to determine backend URL without hardcoding ports
+// Try alternative connection methods to the backend
 const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+// Fallback URLs if the primary one fails
+const FALLBACK_URLS = [
+  "/api", // Try Netlify proxy if available
+  "https://cors-anywhere.herokuapp.com/https://klassconnect-backend.onrender.com", // Public CORS proxy as last resort
+];
 
 let isBackendOnline = false;
+let currentBackendUrlIndex = 0;
+let activeBackendUrl = BACKEND_URL;
 
 document.addEventListener("DOMContentLoaded", function () {
   const uploadForm = document.getElementById("uploadForm");
@@ -13,12 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const retakeQuizButton = document.getElementById("retakeQuiz");
   const backendStatusElement = document.getElementById("backendStatus");
 
-  console.log("Using BACKEND_URL:", BACKEND_URL);
+  console.log("Initial BACKEND_URL:", BACKEND_URL);
 
   // Improve the backend status check with better error handling
   checkBackendStatus();
 
-  // Make fetch requests more resilient by ensuring consistent URL formatting
+  // Make fetch requests more resilient with retry logic
   function getEndpointUrl(endpoint) {
     // Remove any leading slash from the endpoint to avoid double slashes
     const cleanEndpoint = endpoint.startsWith("/")
@@ -26,75 +33,114 @@ document.addEventListener("DOMContentLoaded", function () {
       : endpoint;
 
     // Ensure the backend URL does not end with a slash
-    const baseUrl = BACKEND_URL.endsWith("/")
-      ? BACKEND_URL.slice(0, -1)
-      : BACKEND_URL;
+    const baseUrl = activeBackendUrl.endsWith("/")
+      ? activeBackendUrl.slice(0, -1)
+      : activeBackendUrl;
 
     return `${baseUrl}/${cleanEndpoint}`;
   }
 
-  // Function to check backend status
+  // Improved fetch function with retry logic
+  async function fetchWithRetry(url, options, retries = 2) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}`);
+      }
+      return response;
+    } catch (error) {
+      if (retries > 0) {
+        console.log(
+          `Retry attempt, ${retries} remaining. Trying different URL...`
+        );
+        // Try the next backend URL
+        currentBackendUrlIndex =
+          (currentBackendUrlIndex + 1) % (FALLBACK_URLS.length + 1);
+        activeBackendUrl =
+          currentBackendUrlIndex === 0
+            ? BACKEND_URL
+            : FALLBACK_URLS[currentBackendUrlIndex - 1];
+        console.log("Switching to:", activeBackendUrl);
+
+        // Rebuild the URL with the new backend
+        const newUrl = getEndpointUrl(url.split("/").pop());
+        return fetchWithRetry(newUrl, options, retries - 1);
+      }
+      throw error;
+    }
+  }
+
+  // Function to check backend status with retry logic
   function checkBackendStatus() {
     backendStatusElement.style.display = "block";
     backendStatusElement.style.backgroundColor = "#ffffcc";
     backendStatusElement.textContent = "Checking connection to server...";
 
-    // Use a shorter timeout
-    let timeoutId = setTimeout(() => {
-      backendStatusElement.textContent = "❌ Server connection timed out";
-      backendStatusElement.style.backgroundColor = "#ffcccc";
-      displayOfflineWarning();
-    }, 10000); // 10 seconds timeout
+    // Try all possible backend URLs
+    let attempts = 0;
+    let maxAttempts = FALLBACK_URLS.length + 1; // Main URL + fallbacks
 
-    // Try the status check with more permissive settings
-    fetch(getEndpointUrl("status"), {
-      method: "GET",
-      mode: "cors",
-      credentials: "omit",
-      cache: "no-store", // Prevent caching of the status check
-      headers: {
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-      },
-    })
-      .then((response) => {
-        clearTimeout(timeoutId);
-
-        // Check network type for debugging
-        let connectionType = "";
-        if (navigator.connection) {
-          connectionType = navigator.connection.effectiveType || "unknown";
-        }
-        console.log("Network type:", connectionType);
-
-        if (!response.ok) {
-          throw new Error(`Status check failed: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Backend status:", data);
-        backendStatusElement.textContent = "✅ Connected to server";
-        backendStatusElement.style.backgroundColor = "#ccffcc";
-        isBackendOnline = true;
-
-        // Enable the upload form button that might have been disabled
-        const submitButton = document.querySelector(
-          "#uploadForm button[type='submit']"
-        );
-        if (submitButton) submitButton.disabled = false;
-
-        setTimeout(() => {
-          backendStatusElement.style.display = "none";
-        }, 3000);
-      })
-      .catch((error) => {
-        clearTimeout(timeoutId);
-        console.error("Backend connectivity issue:", error);
+    function tryNextUrl() {
+      if (attempts >= maxAttempts) {
         backendStatusElement.textContent = "❌ Could not connect to server";
         backendStatusElement.style.backgroundColor = "#ffcccc";
         displayOfflineWarning();
-      });
+        return;
+      }
+
+      // Set the active backend URL
+      activeBackendUrl =
+        attempts === 0 ? BACKEND_URL : FALLBACK_URLS[attempts - 1];
+      console.log(
+        `Attempt ${attempts + 1}/${maxAttempts} using: ${activeBackendUrl}`
+      );
+
+      fetch(getEndpointUrl("status"), {
+        method: "GET",
+        mode: "cors",
+        credentials: "omit",
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          // Additional headers that can help
+          Accept: "application/json, text/plain, */*",
+        },
+        // Set a shorter timeout for each attempt
+        signal: AbortSignal.timeout(5000), // 5 seconds timeout
+      })
+        .then((response) => {
+          if (!response.ok)
+            throw new Error(`Status check failed: ${response.status}`);
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Backend status:", data);
+          backendStatusElement.textContent = "✅ Connected to server";
+          backendStatusElement.style.backgroundColor = "#ccffcc";
+          isBackendOnline = true;
+          currentBackendUrlIndex = attempts; // Remember which URL worked
+          console.log("Using backend URL:", activeBackendUrl);
+
+          // Enable form
+          const submitButton = document.querySelector(
+            "#uploadForm button[type='submit']"
+          );
+          if (submitButton) submitButton.disabled = false;
+
+          setTimeout(() => {
+            backendStatusElement.style.display = "none";
+          }, 3000);
+        })
+        .catch((error) => {
+          console.error(`Connection attempt ${attempts + 1} failed:`, error);
+          attempts++;
+          tryNextUrl(); // Try the next URL
+        });
+    }
+
+    // Start the process
+    tryNextUrl();
   }
 
   function displayOfflineWarning() {
@@ -182,6 +228,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Create an abort controller for timeout handling
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+
+    // Use the current active backend URL
+    console.log("Uploading to:", activeBackendUrl);
 
     fetch(getEndpointUrl("upload"), {
       method: "POST",

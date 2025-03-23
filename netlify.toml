@@ -1,7 +1,7 @@
 [build]
   publish = "dist"
 
-# Improved redirect configuration for all backend endpoints
+# Direct connection to Render backend endpoints
 [[redirects]]
   from = "/api/*"
   to = "https://klassconnect-backend.onrender.com/:splat"
@@ -9,23 +9,43 @@
   force = true
   [redirects.headers]
     Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
     Access-Control-Allow-Headers = "*"
+    Access-Control-Max-Age = "86400"
 
-# Handle OPTIONS preflight requests for CORS
+# Special handler for OPTIONS preflight requests (Needed for CORS)
 [[redirects]]
-  from = "/*"
+  from = "/api/*"
   to = "https://klassconnect-backend.onrender.com/:splat"
-  status = 200
+  status = 204
   force = true
   conditions = {Methods = ["OPTIONS"]}
   [redirects.headers]
     Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
     Access-Control-Allow-Headers = "*"
     Access-Control-Max-Age = "86400"
 
-# SPA fallback - keep this last
+# Ensure these specific endpoints are properly handled
+[[redirects]]
+  from = "/api/status"
+  to = "https://klassconnect-backend.onrender.com/status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/upload"
+  to = "https://klassconnect-backend.onrender.com/upload"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/submit_quiz"
+  to = "https://klassconnect-backend.onrender.com/submit_quiz"
+  status = 200
+  force = true
+
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -35,9 +55,8 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
-    Content-Security-Policy = "upgrade-insecure-requests"
+    # Remove this as it might cause issues
+    # Content-Security-Policy = "upgrade-insecure-requests"
+    # Always allow CORS from any origin
     Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
