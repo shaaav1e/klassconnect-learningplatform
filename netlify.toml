@@ -1,0 +1,27 @@
+[build]
+  publish = "dist"  # Adjust if your build output directory is different
+
+# Handle redirects and proxy requests to avoid CORS
+[[redirects]]
+  from = "/api/*"
+  to = "https://klassconnect-backend.onrender.com/:splat"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+# SPA fallback for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Add headers to all responses
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    # Allow connections from anywhere
+    Access-Control-Allow-Origin = "*" 
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"

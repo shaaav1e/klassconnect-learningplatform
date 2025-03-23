@@ -11,11 +11,17 @@
       name="description"
       content="KlassConnect Quiz Generator - Create quizzes from PDF documents"
     />
-    <!-- Add CORS headers for fetch requests -->
+    <!-- Add CORS headers and ensure mobile compatibility -->
     <meta
       http-equiv="Content-Security-Policy"
       content="upgrade-insecure-requests"
     />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
   </head>
   <body>
     <nav>
@@ -41,6 +47,17 @@
       >
         Checking connection to server...
       </div>
+
+      <!-- Network status indicator for debugging -->
+      <div
+        id="networkInfo"
+        style="
+          display: none;
+          font-size: 0.8em;
+          color: #666;
+          margin-bottom: 10px;
+        "
+      ></div>
 
       <h1>Upload a PDF to Generate Quiz</h1>
 
@@ -102,5 +119,65 @@
 
     <!-- Use only one script for quiz functionality -->
     <script type="module" src="/src/js/quiz.js"></script>
+
+    <!-- Add network detection helpers -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const networkInfo = document.getElementById("networkInfo");
+
+        // Display network information if available
+        function updateNetworkInfo() {
+          if (navigator.connection) {
+            const conn = navigator.connection;
+            networkInfo.textContent = `Network: ${
+              conn.effectiveType || "unknown"
+            }, 
+                                      Downlink: ${
+                                        conn.downlink
+                                          ? conn.downlink + " Mbps"
+                                          : "unknown"
+                                      },
+                                      RTT: ${
+                                        conn.rtt ? conn.rtt + " ms" : "unknown"
+                                      }`;
+            networkInfo.style.display = "block";
+          } else {
+            networkInfo.textContent = "Network info not available";
+            networkInfo.style.display = "block";
+          }
+        }
+
+        // Check network status on page load
+        updateNetworkInfo();
+
+        // Update network info when it changes, if supported
+        if (navigator.connection && navigator.connection.addEventListener) {
+          navigator.connection.addEventListener("change", updateNetworkInfo);
+        }
+
+        // Check for online/offline status
+        window.addEventListener("online", function () {
+          console.log("Browser is online");
+          document.body.classList.remove("offline");
+
+          // Refresh connection status
+          const event = new Event("reconnect");
+          document.dispatchEvent(event);
+        });
+
+        window.addEventListener("offline", function () {
+          console.log("Browser is offline");
+          document.body.classList.add("offline");
+
+          // Show offline message
+          const backendStatus = document.getElementById("backendStatus");
+          if (backendStatus) {
+            backendStatus.textContent = "❌ You are offline";
+            backendStatus.style.backgroundColor = "#ffcccc";
+            backendStatus.style.display = "block";
+          }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -1,5 +1,8 @@
-// Explicitly set backend URL to use the Render deployment
-const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+// Determine backend URL dynamically - don't hardcode
+const isProd = window.location.hostname !== "localhost";
+const BACKEND_URL = isProd
+  ? "https://klassconnect-backend.onrender.com"
+  : "/api"; // Use Vite's proxy for local development
 let isBackendOnline = false;
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -14,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("Using BACKEND_URL:", BACKEND_URL);
 
-  // Simplify the backend status check to avoid CORS issues
+  // Improve the backend status check with better error handling
   checkBackendStatus();
 
   // Function to check backend status
@@ -23,21 +26,34 @@ document.addEventListener("DOMContentLoaded", function () {
     backendStatusElement.style.backgroundColor = "#ffffcc";
     backendStatusElement.textContent = "Checking connection to server...";
 
-    // Use a timeout to handle very slow connections
+    // Use a shorter timeout
     let timeoutId = setTimeout(() => {
       backendStatusElement.textContent = "❌ Server connection timed out";
       backendStatusElement.style.backgroundColor = "#ffcccc";
       displayOfflineWarning();
-    }, 15000);
+    }, 10000); // 10 seconds timeout
 
+    // Try the status check with more permissive settings
     fetch(`${BACKEND_URL}/status`, {
       method: "GET",
       mode: "cors",
-      // Disable credentials completely to avoid CORS preflight
       credentials: "omit",
+      cache: "no-store", // Prevent caching of the status check
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+      },
     })
       .then((response) => {
         clearTimeout(timeoutId);
+
+        // Check network type for debugging
+        let connectionType = "";
+        if (navigator.connection) {
+          connectionType = navigator.connection.effectiveType || "unknown";
+        }
+        console.log("Network type:", connectionType);
+
         if (!response.ok) {
           throw new Error(`Status check failed: ${response.status}`);
         }
@@ -48,6 +64,13 @@ document.addEventListener("DOMContentLoaded", function () {
         backendStatusElement.textContent = "✅ Connected to server";
         backendStatusElement.style.backgroundColor = "#ccffcc";
         isBackendOnline = true;
+
+        // Enable the upload form button that might have been disabled
+        const submitButton = document.querySelector(
+          "#uploadForm button[type='submit']"
+        );
+        if (submitButton) submitButton.disabled = false;
+
         setTimeout(() => {
           backendStatusElement.style.display = "none";
         }, 3000);
@@ -125,33 +148,68 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Uploading file:", formData.get("file").name);
     console.log("Number of questions:", formData.get("num_questions"));
 
+    // Check file size - large files can timeout on mobile networks
+    const file = formData.get("file");
+    const fileSizeMB = file.size / (1024 * 1024);
+    console.log("File size:", fileSizeMB.toFixed(2), "MB");
+
+    if (fileSizeMB > 10) {
+      loadingSpinner.style.display = "none";
+      if (
+        !confirm(
+          `The file is ${fileSizeMB.toFixed(
+            2
+          )}MB which may be slow on mobile networks. Continue anyway?`
+        )
+      ) {
+        return;
+      }
+    }
+
+    // Create an abort controller for timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+
     fetch(`${BACKEND_URL}/upload`, {
       method: "POST",
       body: formData,
       mode: "cors",
       credentials: "omit", // Changed from "same-origin" to avoid credential issues across domains
+      signal: controller.signal,
+      // Additional headers that might help with mobile networks
+      headers: {
+        Accept: "application/json",
+        "X-Requested-With": "fetch",
+      },
     })
       .then(async (response) => {
-        // Handle only 2xx responses as successful
-        if (!response.ok) {
-          // Try to get response text for debugging
-          const responseText = await response.text();
-          console.log("Error response:", responseText);
+        clearTimeout(timeoutId);
 
-          // Try to parse as JSON if possible
+        // Try to get a more detailed error from the response
+        if (!response.ok) {
+          let errorMessage = `Server returned ${response.status}`;
+
           try {
-            const errorData = JSON.parse(responseText);
-            throw new Error(
-              errorData.error || `Server returned ${response.status}`
-            );
+            // Attempt to get error message from JSON response
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+              const errorJson = await response.json();
+              if (errorJson.error) {
+                errorMessage = errorJson.error;
+              }
+            } else {
+              // Try to get text error
+              const errorText = await response.text();
+              if (errorText) {
+                errorMessage += `: ${errorText.substring(0, 100)}`; // Truncate long error messages
+              }
+            }
           } catch (e) {
-            // If parsing fails, just use the status
-            throw new Error(
-              `Server returned ${response.status}: ${
-                response.statusText || "Unknown error"
-              }`
-            );
+            // If we can't parse the error, just use the status code
+            errorMessage += ": Unknown error";
           }
+
+          throw new Error(errorMessage);
         }
 
         return response.json();
@@ -175,11 +233,23 @@ document.addEventListener("DOMContentLoaded", function () {
         quizSection.scrollIntoView({ behavior: "smooth" });
       })
       .catch((error) => {
+        clearTimeout(timeoutId);
         loadingSpinner.style.display = "none";
+
         console.error("Upload Error:", error);
-        alert(
-          `Error connecting to server: ${error.message}. Please check your internet connection and try again. If this persists, the backend server may be down or experiencing issues.`
-        );
+
+        if (error.name === "AbortError") {
+          alert(
+            "Request timed out. This might be due to a slow network connection or a large file. Try again with a smaller file or on a faster network."
+          );
+        } else {
+          alert(
+            `Error connecting to server: ${error.message}. Please check your internet connection and try again. If this persists, the backend server may be down or experiencing issues.`
+          );
+        }
+
+        // Try to reconnect after an error
+        checkBackendStatus();
       });
   });
 
