@@ -1,9 +1,8 @@
 // Determine backend URL based on environment
 const isProd = window.location.hostname !== "localhost";
 const BACKEND_URL = isProd
-  ? import.meta.env.VITE_BACKEND_URL_PROD ||
-    "https://klassconnect-backend.onrender.com"
-  : import.meta.env.VITE_BACKEND_URL_DEV || "http://localhost:10000";
+  ? "https://klassconnect-backend.onrender.com"
+  : "http://localhost:10000";
 
 document.addEventListener("DOMContentLoaded", function () {
   const uploadForm = document.getElementById("uploadForm");
@@ -30,10 +29,15 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(`${BACKEND_URL}/upload`, {
       method: "POST",
       body: formData,
+      // Add proper CORS headers
+      mode: "cors",
+      credentials: "same-origin",
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(
+            `Server returned ${response.status}: ${response.statusText}`
+          );
         }
         return response.json();
       })
@@ -57,7 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((error) => {
         loadingSpinner.style.display = "none";
-        alert("Error: " + error.message);
+        console.error("Upload Error:", error);
+        alert(
+          `Error connecting to server: ${error.message}. Please check your internet connection and try again.`
+        );
       });
   });
 
@@ -150,10 +157,15 @@ document.addEventListener("DOMContentLoaded", function () {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ answers: userAnswers }),
+      // Add proper CORS headers
+      mode: "cors",
+      credentials: "same-origin",
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(
+            `Server returned ${response.status}: ${response.statusText}`
+          );
         }
         return response.json();
       })
@@ -174,7 +186,10 @@ document.addEventListener("DOMContentLoaded", function () {
         resultsSection.scrollIntoView({ behavior: "smooth" });
       })
       .catch((error) => {
-        alert("Error submitting quiz: " + error.message);
+        console.error("Submit Error:", error);
+        alert(
+          `Error submitting quiz: ${error.message}. Please check your internet connection and try again.`
+        );
       });
   });
 

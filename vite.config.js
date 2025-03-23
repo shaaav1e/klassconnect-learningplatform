@@ -12,6 +12,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+    open: "/index.html",
   },
   build: {
     rollupOptions: {

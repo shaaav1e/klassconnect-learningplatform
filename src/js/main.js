@@ -139,8 +139,12 @@ document.addEventListener("DOMContentLoaded", function () {
 // Only run this check if we're not on the login page to prevent redirect loops
 if (!window.location.pathname.includes("login.html")) {
   onAuthStateChanged(auth, async (user) => {
-    // Skip automatic redirection on login page
-    if (window.location.pathname.includes("login.html")) {
+    // Don't redirect if on index page or login page
+    if (
+      window.location.pathname === "/" ||
+      window.location.pathname === "/index.html" ||
+      window.location.pathname.includes("login.html")
+    ) {
       return;
     }
 
@@ -173,26 +177,33 @@ if (!window.location.pathname.includes("login.html")) {
             window.location.href = "/admin.html";
           }
         } else {
-          console.warn(
-            "User document not found in Firestore. Creating new record."
-          );
-          // Create basic user document
-          await setDoc(doc(db, "users", user.email.toLowerCase()), {
-            uid: user.uid,
-            email: user.email.toLowerCase(),
-            role: "Student", // Default role
-            createdAt: new Date(),
-          });
+          // Only redirect if not on index page
+          if (
+            window.location.pathname !== "/" &&
+            window.location.pathname !== "/index.html"
+          ) {
+            console.warn(
+              "User document not found in Firestore. Creating new record."
+            );
+            // Create basic user document
+            await setDoc(doc(db, "users", user.email.toLowerCase()), {
+              uid: user.uid,
+              email: user.email.toLowerCase(),
+              role: "Student", // Default role
+              createdAt: new Date(),
+            });
 
-          // Default to dashboard for new users
-          window.location.href = "/dashboard.html";
+            // Default to dashboard for new users
+            window.location.href = "/dashboard.html";
+          }
         }
       } catch (error) {
         console.error("Error retrieving user role:", error);
       }
     } else if (
       !window.location.pathname.includes("index.html") &&
-      !window.location.pathname.includes("login.html")
+      !window.location.pathname.includes("login.html") &&
+      window.location.pathname !== "/"
     ) {
       // Redirect to login only if not already on index or login page
       window.location.href = "/login.html";

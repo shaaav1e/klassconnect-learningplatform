@@ -14,8 +14,10 @@ app = Flask(__name__,
             static_folder="../",  # This points to your main directory where static files are (Vite folder)
             template_folder="../")  # This points to your main directory where HTML templates are (Vite folder)
 
-# Enable CORS - Update the port to match the frontend's port (5176)
-CORS(app, origins=["http://localhost:5176", "https://klassconnect.netlify.app"])
+# Enable CORS - Allow requests from any origin to support cross-network access
+CORS(app, origins=["http://localhost:5176", "https://klassconnect.netlify.app", "*"], 
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"])
 
 # OpenRouter API Key - Use the hardcoded value as fallback if env variable fails
 API_KEY = os.environ.get("OPENROUTER_API_KEY")
@@ -89,32 +91,36 @@ def generate_quiz_from_text(text, num_questions=5):
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
     """Handle PDF upload and generate MCQs."""
-    if 'file' not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
+    try:
+        if 'file' not in request.files:
+            return jsonify({"error": "No file uploaded"}), 400
 
-    file = request.files['file']
-    num_questions = int(request.form.get('num_questions', 5))
+        file = request.files['file']
+        num_questions = int(request.form.get('num_questions', 5))
 
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
 
-    # Save PDF temporarily in a secure location
-    temp_pdf_path = os.path.join(app.root_path, 'temp.pdf')
-    file.save(temp_pdf_path)
+        # Save PDF temporarily in a secure location
+        temp_pdf_path = os.path.join(app.root_path, 'temp.pdf')
+        file.save(temp_pdf_path)
 
-    # Extract text from the PDF
-    extracted_text = extract_text_from_pdf(temp_pdf_path)
+        # Extract text from the PDF
+        extracted_text = extract_text_from_pdf(temp_pdf_path)
 
-    if not extracted_text:
-        return jsonify({"error": "Failed to extract text from PDF"}), 400
+        if not extracted_text:
+            return jsonify({"error": "Failed to extract text from PDF"}), 400
 
-    # Generate MCQs based on the extracted text
-    mcqs = generate_quiz_from_text(extracted_text, num_questions)
+        # Generate MCQs based on the extracted text
+        mcqs = generate_quiz_from_text(extracted_text, num_questions)
 
-    if isinstance(mcqs, str):  # If an error message is returned
-        return jsonify({"error": mcqs}), 400
+        if isinstance(mcqs, str):  # If an error message is returned
+            return jsonify({"error": mcqs}), 400
 
-    return jsonify({"mcqs": mcqs})
+        return jsonify({"mcqs": mcqs})
+    except Exception as e:
+        app.logger.error(f"Error in upload_pdf: {str(e)}")
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 # Route to submit quiz answers
 @app.route('/submit_quiz', methods=['POST'])
@@ -187,10 +193,10 @@ def status():
         "environment": os.environ.get("FLASK_ENV", "production")
     })
 
-# Run the app
+# Add more verbose logging
 if __name__ == "__main__":
     # Get port from environment variable with fallback to 5000 (Render's preferred default)
     port = int(os.environ.get("PORT", 10000))  # Changed default to 10000 to match .env
-    print(f"Starting server on port {port}")  # Add explicit logging
+    print(f"Starting server on port {port}, CORS enabled for multiple origins")
     # Explicitly bind to 0.0.0.0 to listen on all network interfaces
     app.run(host="0.0.0.0", port=port, debug=True)  # Enable debug mode for local development

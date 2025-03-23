@@ -217,10 +217,11 @@ logouttext.addEventListener("click", async () => {
 
 // Check if user is logged in (for security)
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
+  // Only redirect if we're on the dashboard page
+  if (!user && window.location.pathname.includes("dashboard.html")) {
     // If no user is logged in, redirect to login page
-    window.location.href = "/index.html";
-  } else {
+    window.location.href = "/login.html";
+  } else if (user) {
     // User is logged in, update UI with their information
     try {
       // Get user document from Firestore to check for additional profile data

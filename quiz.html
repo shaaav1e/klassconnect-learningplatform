@@ -11,7 +11,7 @@
     <nav>
       <div class="dash-nav flex-row flex-between flex-center pt-1">
         <div class="dash-left">
-          <a href="/index.html">
+          <a href="/index.html" class="logo">
             <h2>KlassConnect</h2>
           </a>
         </div>
@@ -91,39 +91,8 @@
       </div>
     </div>
 
+    <!-- Use only one script for quiz functionality -->
     <script type="module" src="/src/js/quiz.js"></script>
-    <script type="module">
-      // Define BACKEND_URL directly here:
-      const BACKEND_URL = "https://klassconnect-backend.onrender.com";
-
-      async function uploadPDF() {
-        const formData = new FormData(document.getElementById("uploadForm"));
-        try {
-          const response = await fetch(`${BACKEND_URL}/upload`, {
-            method: "POST",
-            body: formData,
-          });
-          // Handle response
-        } catch (error) {
-          // Handle error
-        }
-      }
-
-      async function submitQuiz() {
-        const userAnswers = {}; // Collect user answers
-        try {
-          const response = await fetch(`${BACKEND_URL}/submit_quiz`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ answers: userAnswers }),
-          });
-          // Handle response
-        } catch (error) {
-          // Handle error
-        }
-      }
-    </script>
+    <!-- Remove the conflicting inline script -->
   </body>
 </html>

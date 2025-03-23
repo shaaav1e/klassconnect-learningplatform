@@ -8,7 +8,6 @@
 }
 
 .right-dash {
-   
     padding-right: 10em; 
 }
 
@@ -516,25 +515,26 @@
 
 /* User profile styles */
 .user-profile {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+    position: relative;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
 }
 
 .profile-image {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 8px;
-  object-fit: cover;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
 }
 
 .user-name {
-  font-weight: 500;
-  max-width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-weight: 500;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .logout-modal {
