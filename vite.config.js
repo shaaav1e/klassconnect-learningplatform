@@ -2,12 +2,17 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   server: {
-    host: "0.0.0.0", // Change to 0.0.0.0 to allow access from local network devices
+    // Use 0.0.0.0 to allow access from any device on the network
+    host: "0.0.0.0",
+
+    // Allow Vite to find an available port if 5176 is in use
     port: 5176,
+    strictPort: false, // Don't fail if port is already in use
+
+    // Keep the proxy for local development, but don't rely on it in production
     proxy: {
-      // Add proxy for local development
       "/api": {
-        target: "http://localhost:10000",
+        target: "https://klassconnect-backend.onrender.com", // Use the production URL directly
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         configure: (proxy, _options) => {

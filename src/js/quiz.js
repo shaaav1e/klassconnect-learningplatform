@@ -1,8 +1,6 @@
-// Determine backend URL dynamically - don't hardcode
-const isProd = window.location.hostname !== "localhost";
-const BACKEND_URL = isProd
-  ? "https://klassconnect-backend.onrender.com"
-  : "/api"; // Use Vite's proxy for local development
+// Use a more reliable way to determine backend URL without hardcoding ports
+const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+
 let isBackendOnline = false;
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -20,6 +18,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // Improve the backend status check with better error handling
   checkBackendStatus();
 
+  // Make fetch requests more resilient by ensuring consistent URL formatting
+  function getEndpointUrl(endpoint) {
+    // Remove any leading slash from the endpoint to avoid double slashes
+    const cleanEndpoint = endpoint.startsWith("/")
+      ? endpoint.substring(1)
+      : endpoint;
+
+    // Ensure the backend URL does not end with a slash
+    const baseUrl = BACKEND_URL.endsWith("/")
+      ? BACKEND_URL.slice(0, -1)
+      : BACKEND_URL;
+
+    return `${baseUrl}/${cleanEndpoint}`;
+  }
+
   // Function to check backend status
   function checkBackendStatus() {
     backendStatusElement.style.display = "block";
@@ -34,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 10000); // 10 seconds timeout
 
     // Try the status check with more permissive settings
-    fetch(`${BACKEND_URL}/status`, {
+    fetch(getEndpointUrl("status"), {
       method: "GET",
       mode: "cors",
       credentials: "omit",
@@ -170,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
-    fetch(`${BACKEND_URL}/upload`, {
+    fetch(getEndpointUrl("upload"), {
       method: "POST",
       body: formData,
       mode: "cors",
@@ -336,7 +349,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Submit answers to the server with improved headers
-    fetch(`${BACKEND_URL}/submit_quiz`, {
+    fetch(getEndpointUrl("submit_quiz"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

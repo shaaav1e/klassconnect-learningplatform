@@ -13,10 +13,6 @@
     />
     <!-- Add CORS headers and ensure mobile compatibility -->
     <meta
-      http-equiv="Content-Security-Policy"
-      content="upgrade-insecure-requests"
-    />
-    <meta
       http-equiv="Cache-Control"
       content="no-cache, no-store, must-revalidate"
     />
@@ -115,6 +111,20 @@
         <div id="resultDetails"></div>
         <button id="retakeQuiz" class="btn">Take Another Quiz</button>
       </div>
+
+      <div id="troubleshoot" style="margin-top: 20px; display: none">
+        <button
+          id="checkDirectConnection"
+          class="btn"
+          style="background-color: #f0f0f0; color: #333"
+        >
+          Check Direct Backend Connection
+        </button>
+        <div
+          id="connectionResult"
+          style="margin-top: 10px; font-size: 0.9em"
+        ></div>
+      </div>
     </div>
 
     <!-- Use only one script for quiz functionality -->
@@ -178,6 +188,44 @@
           }
         });
       });
+
+      // Show troubleshooting options after a delay if the main app hasn't connected
+      setTimeout(() => {
+        const statusElement = document.getElementById("backendStatus");
+        const troubleshootDiv = document.getElementById("troubleshoot");
+
+        if (statusElement && statusElement.textContent.includes("❌")) {
+          troubleshootDiv.style.display = "block";
+
+          document
+            .getElementById("checkDirectConnection")
+            .addEventListener("click", () => {
+              const resultDiv = document.getElementById("connectionResult");
+              resultDiv.innerHTML = "Testing direct connection...";
+
+              // Try a direct fetch to the backend
+              fetch("https://klassconnect-backend.onrender.com/status", {
+                method: "GET",
+                mode: "cors",
+                credentials: "omit",
+                cache: "no-store",
+              })
+                .then((response) => {
+                  if (!response.ok)
+                    throw new Error(`Status: ${response.status}`);
+                  return response.json();
+                })
+                .then((data) => {
+                  resultDiv.innerHTML = `✅ Direct connection successful! Server status: ${data.status}`;
+                  resultDiv.style.color = "green";
+                })
+                .catch((error) => {
+                  resultDiv.innerHTML = `❌ Direct connection failed: ${error.message}`;
+                  resultDiv.style.color = "red";
+                });
+            });
+        }
+      }, 12000); // Check after 12 seconds
     </script>
   </body>
 </html>
