@@ -1,8 +1,6 @@
-// Determine backend URL based on environment
-const isProd = window.location.hostname !== "localhost";
-const BACKEND_URL = isProd
-  ? "https://klassconnect-backend.onrender.com"
-  : "http://localhost:10000";
+// Explicitly set backend URL to use the Render deployment
+const BACKEND_URL = "https://klassconnect-backend.onrender.com";
+let isBackendOnline = false;
 
 document.addEventListener("DOMContentLoaded", function () {
   const uploadForm = document.getElementById("uploadForm");
@@ -12,8 +10,97 @@ document.addEventListener("DOMContentLoaded", function () {
   const loadingSpinner = document.getElementById("loadingSpinner");
   const resultsSection = document.getElementById("resultsSection");
   const retakeQuizButton = document.getElementById("retakeQuiz");
+  const backendStatusElement = document.getElementById("backendStatus");
 
   console.log("Using BACKEND_URL:", BACKEND_URL);
+
+  // Simplify the backend status check to avoid CORS issues
+  checkBackendStatus();
+
+  // Function to check backend status
+  function checkBackendStatus() {
+    backendStatusElement.style.display = "block";
+    backendStatusElement.style.backgroundColor = "#ffffcc";
+    backendStatusElement.textContent = "Checking connection to server...";
+
+    // Use a timeout to handle very slow connections
+    let timeoutId = setTimeout(() => {
+      backendStatusElement.textContent = "❌ Server connection timed out";
+      backendStatusElement.style.backgroundColor = "#ffcccc";
+      displayOfflineWarning();
+    }, 15000);
+
+    fetch(`${BACKEND_URL}/status`, {
+      method: "GET",
+      mode: "cors",
+      // Disable credentials completely to avoid CORS preflight
+      credentials: "omit",
+    })
+      .then((response) => {
+        clearTimeout(timeoutId);
+        if (!response.ok) {
+          throw new Error(`Status check failed: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Backend status:", data);
+        backendStatusElement.textContent = "✅ Connected to server";
+        backendStatusElement.style.backgroundColor = "#ccffcc";
+        isBackendOnline = true;
+        setTimeout(() => {
+          backendStatusElement.style.display = "none";
+        }, 3000);
+      })
+      .catch((error) => {
+        clearTimeout(timeoutId);
+        console.error("Backend connectivity issue:", error);
+        backendStatusElement.textContent = "❌ Could not connect to server";
+        backendStatusElement.style.backgroundColor = "#ffcccc";
+        displayOfflineWarning();
+      });
+  }
+
+  function displayOfflineWarning() {
+    isBackendOnline = false;
+    const container = document.querySelector(".container");
+
+    // Check if warning already exists
+    if (!document.getElementById("offlineWarning")) {
+      const warning = document.createElement("div");
+      warning.id = "offlineWarning";
+      warning.className = "alert";
+      warning.style.backgroundColor = "#ffcccc";
+      warning.style.padding = "10px";
+      warning.style.marginBottom = "15px";
+      warning.style.borderRadius = "5px";
+      warning.innerHTML = `
+        <p><strong>Warning:</strong> Could not connect to the server. Quiz functionality will not work.</p>
+        <p>Possible reasons:</p>
+        <ul>
+          <li>The server might be temporarily down or starting up (Render free tier can take up to 5 minutes to start)</li>
+          <li>There may be a network connectivity issue</li>
+          <li>CORS policy might be blocking requests</li>
+        </ul>
+        <button id="retryConnection" style="margin-top: 10px; padding: 5px 10px;">Retry Connection</button>
+      `;
+      // Insert before the form
+      container.insertBefore(warning, uploadForm);
+
+      // Add retry button functionality
+      document
+        .getElementById("retryConnection")
+        .addEventListener("click", function () {
+          document.getElementById("offlineWarning").remove();
+          checkBackendStatus();
+        });
+
+      // Disable the upload form
+      document.querySelector(
+        "#uploadForm button[type='submit']"
+      ).disabled = true;
+    }
+  }
 
   let currentQuiz = [];
 
@@ -21,24 +108,52 @@ document.addEventListener("DOMContentLoaded", function () {
   uploadForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    // Check if backend is online before proceeding
+    if (!isBackendOnline) {
+      alert(
+        "Cannot upload PDF: The server is currently offline. Please try again later."
+      );
+      return;
+    }
+
     // Show loading spinner
     loadingSpinner.style.display = "flex";
 
     const formData = new FormData(uploadForm);
 
+    // Log what's being uploaded for debugging
+    console.log("Uploading file:", formData.get("file").name);
+    console.log("Number of questions:", formData.get("num_questions"));
+
     fetch(`${BACKEND_URL}/upload`, {
       method: "POST",
       body: formData,
-      // Add proper CORS headers
       mode: "cors",
-      credentials: "same-origin",
+      credentials: "omit", // Changed from "same-origin" to avoid credential issues across domains
     })
-      .then((response) => {
+      .then(async (response) => {
+        // Handle only 2xx responses as successful
         if (!response.ok) {
-          throw new Error(
-            `Server returned ${response.status}: ${response.statusText}`
-          );
+          // Try to get response text for debugging
+          const responseText = await response.text();
+          console.log("Error response:", responseText);
+
+          // Try to parse as JSON if possible
+          try {
+            const errorData = JSON.parse(responseText);
+            throw new Error(
+              errorData.error || `Server returned ${response.status}`
+            );
+          } catch (e) {
+            // If parsing fails, just use the status
+            throw new Error(
+              `Server returned ${response.status}: ${
+                response.statusText || "Unknown error"
+              }`
+            );
+          }
         }
+
         return response.json();
       })
       .then((data) => {
@@ -63,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadingSpinner.style.display = "none";
         console.error("Upload Error:", error);
         alert(
-          `Error connecting to server: ${error.message}. Please check your internet connection and try again.`
+          `Error connecting to server: ${error.message}. Please check your internet connection and try again. If this persists, the backend server may be down or experiencing issues.`
         );
       });
   });
@@ -121,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Handle quiz submission
+  // Handle quiz submission with updated fetch configuration
   submitQuizButton.addEventListener("click", function () {
     // Collect user answers
     const userAnswers = [];
@@ -150,22 +265,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Submit answers to the server
+    // Submit answers to the server with improved headers
     fetch(`${BACKEND_URL}/submit_quiz`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify({ answers: userAnswers }),
-      // Add proper CORS headers
+      // Updated CORS settings
       mode: "cors",
-      credentials: "same-origin",
+      credentials: "omit", // Changed from "same-origin" to avoid credential issues
     })
-      .then((response) => {
+      .then(async (response) => {
+        // Improved error handling with attempt to get JSON error
         if (!response.ok) {
-          throw new Error(
-            `Server returned ${response.status}: ${response.statusText}`
-          );
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await response.json();
+            throw new Error(
+              errorData.error ||
+                `Server returned ${response.status}: ${response.statusText}`
+            );
+          } else {
+            throw new Error(
+              `Server returned ${response.status}: ${response.statusText}`
+            );
+          }
         }
         return response.json();
       })

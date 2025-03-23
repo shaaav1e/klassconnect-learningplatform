@@ -6,6 +6,16 @@
     <title>Quiz Generator</title>
     <link rel="stylesheet" href="/src/css/style.css" />
     <link rel="stylesheet" href="/src/css/quiz.css" />
+    <!-- Add metadata for Netlify deployment -->
+    <meta
+      name="description"
+      content="KlassConnect Quiz Generator - Create quizzes from PDF documents"
+    />
+    <!-- Add CORS headers for fetch requests -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
   </head>
   <body>
     <nav>
@@ -17,22 +27,21 @@
         </div>
       </div>
     </nav>
-    <!-- <div class="right-dash">
-          <div class="flex-row user-profile flex-center gap-logout">
-            <img src="/src/login.jpg" alt="login" class="login-photo">
-            <div class="user-name">Shawaiz</div>
-            <button class="logout-btn" id="logout">
-            <ion-icon name="caret-down-outline"></ion-icon>
-          </button>
-          </div>
-        </div>
-      </div>
-      </nav>
-      <div class="logout-modal">
-        <span class="logout-text">Logout</span>
-       </div> -->
 
     <div class="container pt-3">
+      <!-- Add connectivity indicator -->
+      <div
+        id="backendStatus"
+        style="
+          margin-bottom: 15px;
+          padding: 8px;
+          border-radius: 4px;
+          display: none;
+        "
+      >
+        Checking connection to server...
+      </div>
+
       <h1>Upload a PDF to Generate Quiz</h1>
 
       <form id="uploadForm" class="flex-column justify">
@@ -93,6 +102,5 @@
 
     <!-- Use only one script for quiz functionality -->
     <script type="module" src="/src/js/quiz.js"></script>
-    <!-- Remove the conflicting inline script -->
   </body>
 </html>

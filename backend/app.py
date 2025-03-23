@@ -14,10 +14,10 @@ app = Flask(__name__,
             static_folder="../",  # This points to your main directory where static files are (Vite folder)
             template_folder="../")  # This points to your main directory where HTML templates are (Vite folder)
 
-# Enable CORS - Allow requests from any origin to support cross-network access
-CORS(app, origins=["http://localhost:5176", "https://klassconnect.netlify.app", "*"], 
+# Enable CORS - Improved configuration to handle all requests
+CORS(app, resources={r"/*": {"origins": "*"}}, 
      supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization"])
+     allow_headers=["Content-Type", "Authorization", "X-Requested-With"])
 
 # OpenRouter API Key - Use the hardcoded value as fallback if env variable fails
 API_KEY = os.environ.get("OPENROUTER_API_KEY")
@@ -87,7 +87,7 @@ def generate_quiz_from_text(text, num_questions=5):
         return f"Error generating quiz: {str(e)}"
 
 
-# Quiz generation route
+# Quiz generation route with improved error handling
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
     """Handle PDF upload and generate MCQs."""
@@ -183,14 +183,21 @@ def submit_quiz():
 def index():
     return jsonify({"message": "Backend is running. Use the API endpoints for functionality."})
 
-# Add a debug route to check backend connectivity
-@app.route('/status', methods=['GET'])
+# Add a debug route to check backend connectivity with more information
+@app.route('/status', methods=['GET', 'OPTIONS'])
 def status():
     """Endpoint to check backend status"""
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        response = app.make_default_options_response()
+        return response
+        
     return jsonify({
         "status": "online",
         "api_key_configured": bool(API_KEY),
-        "environment": os.environ.get("FLASK_ENV", "production")
+        "environment": os.environ.get("FLASK_ENV", "production"),
+        "cors_enabled": True,
+        "version": "1.0.1"
     })
 
 # Add more verbose logging
