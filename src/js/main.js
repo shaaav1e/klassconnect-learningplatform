@@ -107,6 +107,34 @@ function toggleAuthButtons(disabled) {
   if (emailBtn) emailBtn.style.opacity = disabled ? "0.7" : "1";
 }
 
+// Fix login button issue - add event listener for login buttons to prevent accidental navigation
+document.addEventListener("DOMContentLoaded", function () {
+  // Fix login buttons if they exist on the current page
+  const allLoginButtons = document.querySelectorAll(".login-btn");
+
+  allLoginButtons.forEach((button) => {
+    // Remove any existing hover events that might be causing issues
+    button.style.pointerEvents = "auto";
+
+    // Ensure clicks work properly
+    if (button.getAttribute("href") === "/login.html") {
+      button.addEventListener("click", function (e) {
+        // Only allow deliberate clicks to navigate
+        if (e.type === "click") {
+          window.location.href = "/login.html";
+        } else {
+          e.preventDefault();
+        }
+      });
+    }
+  });
+
+  // Improve back button functionality
+  if (document.referrer && !window.location.pathname.includes("index.html")) {
+    window.history.replaceState(null, "", window.location.href);
+  }
+});
+
 // Modified to check user role before redirecting
 // Only run this check if we're not on the login page to prevent redirect loops
 if (!window.location.pathname.includes("login.html")) {

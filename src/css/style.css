@@ -185,3 +185,17 @@ nav
   z-index: 1000 ;
   pointer-events: none ;
 }
+
+/* Logo styling for all pages */
+.logo h2 {
+  background: white;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.logo a {
+  text-decoration: none;
+  color: inherit;
+}

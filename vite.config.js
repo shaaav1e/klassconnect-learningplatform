@@ -20,6 +20,7 @@ export default defineConfig({
         dashboard: "dashboard.html",
         quiz: "quiz.html",
         login: "login.html",
+        html: "htmlcourse.html",
       },
     },
   },

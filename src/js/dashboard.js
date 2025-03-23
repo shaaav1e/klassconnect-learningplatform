@@ -6,7 +6,13 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth"; // ✅ Corrected auth imports
-import { getFirestore, collection, addDoc, getDoc } from "firebase/firestore"; // ✅ Corrected Firestore imports
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDoc,
+  doc,
+} from "firebase/firestore"; // Added doc importports
 import "../css/style.css";
 
 const firebaseConfig = {
@@ -73,6 +79,107 @@ async function loadCourses() {
   }
 }
 
+// Add handlers for other dashboard buttons
+document.addEventListener("DOMContentLoaded", function () {
+  // Dashboard button
+  const dashboardBtn = document.querySelector("#dashboardBtn");
+  if (dashboardBtn) {
+    dashboardBtn.addEventListener("click", loadDashboardContent);
+  }
+
+  // Assignments button
+  const assignmentsBtn = document.querySelector("#assignmentsBtn");
+  if (assignmentsBtn) {
+    assignmentsBtn.addEventListener("click", loadAssignmentsContent);
+  }
+
+  // Stats button
+  const statsBtn = document.querySelector("#statsBtn");
+  if (statsBtn) {
+    statsBtn.addEventListener("click", loadStatsContent);
+  }
+
+  // Enrolled courses button
+  const enrolledBtn = document.querySelector("#enrolledBtn");
+  if (enrolledBtn) {
+    enrolledBtn.addEventListener("click", loadEnrolledCoursesContent);
+  }
+
+  // Ensure the courses button works
+  const loadCoursesBtn = document.querySelector("#loadCourses");
+  if (loadCoursesBtn) {
+    loadCoursesBtn.addEventListener("click", loadCourses);
+  }
+
+  // Load dashboard content by default
+  loadDashboardContent();
+});
+
+// Function to load dashboard content
+function loadDashboardContent() {
+  const dashboardContent = document.querySelector(".dashboard-content");
+  dashboardContent.innerHTML = `
+    <div class="welcome-dashboard">
+      <h2>Welcome to your Dashboard</h2>
+      <p>Here you can manage your courses, track progress, and more.</p>
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <h3>Courses Enrolled</h3>
+          <p>0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Assignments</h3>
+          <p>0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Progress</h3>
+          <p>0%</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Function to load assignments content
+function loadAssignmentsContent() {
+  const dashboardContent = document.querySelector(".dashboard-content");
+  dashboardContent.innerHTML = `
+    <div class="assignments-section">
+      <h2>Your Assignments</h2>
+      <p>No assignments available yet.</p>
+    </div>
+  `;
+}
+
+// Function to load stats content
+function loadStatsContent() {
+  const dashboardContent = document.querySelector(".dashboard-content");
+  dashboardContent.innerHTML = `
+    <div class="stats-section">
+      <h2>Your Statistics</h2>
+      <p>No statistics available yet.</p>
+    </div>
+  `;
+}
+
+// Function to load enrolled courses content
+function loadEnrolledCoursesContent() {
+  const dashboardContent = document.querySelector(".dashboard-content");
+  dashboardContent.innerHTML = `
+    <div class="enrolled-courses-section">
+      <h2>Your Enrolled Courses</h2>
+      <p>You haven't enrolled in any courses yet.</p>
+      <button id="browseCourses" class="btn">Browse Courses</button>
+    </div>
+  `;
+
+  // Add event listener for the browse courses button
+  const browseCourses = document.querySelector("#browseCourses");
+  if (browseCourses) {
+    browseCourses.addEventListener("click", loadCourses);
+  }
+}
+
 // Ensure loadCourses function runs when button exists
 const loadCoursesBtn = document.querySelector("#loadCourses");
 if (loadCoursesBtn) {
@@ -109,11 +216,69 @@ logouttext.addEventListener("click", async () => {
 });
 
 // Check if user is logged in (for security)
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     // If no user is logged in, redirect to login page
     window.location.href = "/index.html";
+  } else {
+    // User is logged in, update UI with their information
+    try {
+      // Get user document from Firestore to check for additional profile data
+      const userDocRef = doc(db, "users", user.email.toLowerCase());
+      const userDoc = await getDoc(userDocRef);
+
+      // Update the UI with user information
+      updateUserUI(user, userDoc.exists() ? userDoc.data() : null);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      // Still show basic user information even if Firestore fetch fails
+      updateUserUI(user);
+    }
   }
 });
+
+// Function to update UI with user information
+function updateUserUI(user, userData = null) {
+  const userNameElement = document.querySelector(".user-name");
+  const userProfileElement = document.querySelector(".user-profile");
+
+  if (userNameElement) {
+    // Use display name from auth or name from Firestore
+    const displayName =
+      user.displayName || userData?.name || user.email.split("@")[0];
+    userNameElement.textContent = displayName;
+  }
+
+  // Check if we already added a profile image
+  if (
+    userProfileElement &&
+    !userProfileElement.querySelector(".profile-image")
+  ) {
+    // Create and add profile image if user has one
+    if (user.photoURL || userData?.profilePic) {
+      const profilePic = document.createElement("img");
+      profilePic.src = user.photoURL || userData?.profilePic;
+      profilePic.alt = "Profile";
+      profilePic.className = "profile-image";
+      profilePic.style.width = "32px";
+      profilePic.style.height = "32px";
+      profilePic.style.borderRadius = "50%";
+      profilePic.style.marginRight = "8px";
+
+      // Insert the profile image before the user name
+      userProfileElement.insertBefore(profilePic, userNameElement);
+    } else {
+      // If no profile image, add a default icon
+      const defaultIcon = document.createElement("ion-icon");
+      defaultIcon.setAttribute("name", "person-circle-outline");
+      defaultIcon.className = "profile-image";
+      defaultIcon.style.fontSize = "28px";
+      defaultIcon.style.marginRight = "8px";
+
+      // Insert the default icon before the user name
+      userProfileElement.insertBefore(defaultIcon, userNameElement);
+    }
+  }
+}
 
 // _______________3) SHOWING ENROLLED COURSES ON DASHBOARD________________________
