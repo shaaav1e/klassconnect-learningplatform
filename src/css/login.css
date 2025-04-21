@@ -126,9 +126,59 @@ label,input
     color: #333;
 }
 
-/* Media Queries */
+/* Vibe Coding - Responsiveness */
 @media (min-width: 768px) {
     .login-image {
         display: block;
+    }
+}
+
+/* Small tablets and large phones */
+@media (max-width: 767px) {
+    .login-container {
+        min-height: 450px;
+        max-width: 95%;
+        margin: 0 auto;
+    }
+    
+    .login-form {
+        padding: 25px;
+    }
+    
+    .login-form h2 {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    /* Adjust button layout on mobile */
+    .flex-row {
+        flex-direction: column;
+    }
+    
+    .login-btn {
+        width: 100%;
+        margin-top: 10px;
+        padding: 0.8em 1.5em;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .login-container {
+        min-height: 400px;
+    }
+    
+    .login-form h2 {
+        font-size: 20px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 10px 14px;
+        font-size: 14px;
     }
 }

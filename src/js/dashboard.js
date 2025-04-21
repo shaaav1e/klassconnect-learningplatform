@@ -36,6 +36,55 @@ const provider = new GoogleAuthProvider();
 //For db - Firestore
 const db = getFirestore(app);
 
+// Mobile Sidebar Toggle Functionality
+document.addEventListener("DOMContentLoaded", function() {
+  // Create mobile sidebar toggle button if it doesn't exist
+  const dashboardContainer = document.querySelector('.dashboard');
+  const leftSection = document.querySelector('.left-section');
+  
+  if (dashboardContainer && leftSection && !document.querySelector('.mobile-sidebar-toggle')) {
+    // Create mobile toggle button
+    const toggleButton = document.createElement('button');
+    toggleButton.className = 'mobile-sidebar-toggle';
+    toggleButton.setAttribute('aria-label', 'Toggle sidebar menu');
+    
+    // Create hamburger icon
+    const span = document.createElement('span');
+    toggleButton.appendChild(span);
+    
+    // Add the toggle before the dashboard container
+    dashboardContainer.parentNode.insertBefore(toggleButton, dashboardContainer);
+    
+    // Add click event to toggle sidebar
+    toggleButton.addEventListener('click', function() {
+      leftSection.classList.toggle('active');
+      this.classList.toggle('active');
+    });
+    
+    // Close sidebar when clicking anywhere in the right section
+    const rightSection = document.querySelector('.right-sec');
+    if (rightSection) {
+      rightSection.addEventListener('click', function() {
+        if (leftSection.classList.contains('active') && window.innerWidth <= 768) {
+          leftSection.classList.remove('active');
+          toggleButton.classList.remove('active');
+        }
+      });
+    }
+    
+    // Close sidebar when sidebar links are clicked on mobile
+    const sidebarLinks = leftSection.querySelectorAll('.sidebar-btn');
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+          leftSection.classList.remove('active');
+          toggleButton.classList.remove('active');
+        }
+      });
+    });
+  }
+});
+
 // _______________1) SHOWING COURSES ON DASHBOARD____________________________________
 
 const coursesButton = document.querySelector(".sidebar-btn.dash.course");

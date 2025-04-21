@@ -35,3 +35,71 @@
     font-weight:700;
     font-size:1.3rem;
 }
+
+/* Responsive Styles */
+@media screen and (max-width: 1200px) {
+    .cards {
+        gap: 5em;
+    }
+    
+    .card {
+        width: 25%;
+        padding: 2em 1.5em;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .rating {
+        padding: 4em 0;
+    }
+    
+    .cards {
+        gap: 2em;
+    }
+    
+    .card {
+        width: 28%;
+        padding: 1.8em 1.5em;
+    }
+    
+    .rating-text h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .cards {
+        flex-direction: column;
+        align-items: center;
+        gap: 2em;
+    }
+    
+    .card {
+        width: 80%;
+        max-width: 300px;
+        padding: 1.5em;
+    }
+    
+    .rating-text h2 {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .rating {
+        padding: 2.5em 0;
+    }
+    
+    .card {
+        width: 90%;
+        padding: 1.2em;
+    }
+    
+    .card h3, .card p {
+        font-size: 1.1rem;
+    }
+    
+    .rating-text h2 {
+        font-size: 1.8rem;
+    }
+}

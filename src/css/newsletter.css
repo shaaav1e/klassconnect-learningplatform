@@ -51,3 +51,66 @@
     /* font-style:italic; */
     color:var(--dark);
 }
+
+/* Vibe Coding - Responsiveness */
+@media screen and (max-width: 991px) {
+    .newsletter .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .newsletter-text {
+        padding: 4em 0 2em 0;
+        width: 100%;
+    }
+    
+    .newsletter-img {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .newsletter h2 {
+        font-size: 2.2rem;
+    }
+    
+    .newsletter p {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .newsletter h2 {
+        font-size: 1.8rem;
+    }
+    
+    .newsletter p {
+        font-size: 0.9rem;
+    }
+    
+    .newsletter span {
+        font-size: 2rem;
+    }
+    
+    .newsletter-img h1 {
+        font-size: 7rem;
+    }
+    
+    .newsletter-text {
+        padding: 3em 0 1.5em 0;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .newsletter h2 {
+        font-size: 1.5rem;
+    }
+    
+    .newsletter span {
+        font-size: 1.7rem;
+    }
+    
+    .newsletter-img h1 {
+        font-size: 5rem;
+    }
+}

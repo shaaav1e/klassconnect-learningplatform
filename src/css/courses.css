@@ -62,3 +62,54 @@ padding:0.8rem 0.5rem;
     text-transform: uppercase;
     font-size:1.2rem;
 }
+
+/* Vibe Coding - Responsiveness */
+@media screen and (max-width: 1200px) {
+    .course-card {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .courses-card {
+        gap: 30px;
+    }
+    
+    .course-text h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .course-card {
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+    
+    .courses-card {
+        gap: 30px;
+    }
+    
+    .course-text h2 {
+        font-size: 2.2rem;
+    }
+    
+    .courses-para {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .course-text h2 {
+        font-size: 1.8rem;
+    }
+    
+    .courses-para {
+        font-size: 1rem;
+    }
+    
+    .course-card h3 {
+        font-size: 1.1rem;
+    }
+}

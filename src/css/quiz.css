@@ -214,3 +214,91 @@
 {
   color:var(--dark);
 }
+
+/* Vibe Coding - Responsiveness */
+@media screen and (max-width: 991px) {
+  #quizSection, #resultsSection {
+    padding: 1.5em;
+  }
+  
+  .quiz-question label {
+    font-size: 1.1em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #quizSection, #resultsSection {
+    padding: 1.2em;
+    margin-top: 1.5em;
+  }
+  
+  .quiz-question {
+    margin-bottom: 1.2em;
+  }
+  
+  .quiz-question label {
+    font-size: 1em;
+  }
+  
+  #submitQuiz {
+    padding: 12px 24px;
+    font-size: 1em;
+  }
+  
+  .score-container {
+    font-size: 1.2em;
+    padding: 0.8em;
+  }
+  
+  .result-item {
+    padding: 0.8em;
+  }
+  
+  /* Better spacing for buttons on mobile */
+  #troubleshoot button, 
+  #troubleshoot a.btn {
+    margin-bottom: 10px;
+    width: 100%;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  #quizSection, #resultsSection {
+    padding: 1em;
+    margin-top: 1em;
+  }
+  
+  .quiz-question label {
+    font-size: 0.9em;
+  }
+  
+  .option-label {
+    font-size: 0.9rem;
+  }
+  
+  .option-item {
+    padding: 6px 10px;
+  }
+  
+  .loading-container p {
+    font-size: 0.9em;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  /* Form adjustments for small screens */
+  #uploadForm .form-group {
+    margin-bottom: 10px;
+  }
+  
+  #uploadForm label, #uploadForm input {
+    font-size: 0.9em;
+  }
+}

@@ -40,6 +40,69 @@ const provider = new GoogleAuthProvider();
 //For db - Firestore
 const db = getFirestore(app);
 
+// Mobile Menu Functionality
+document.addEventListener("DOMContentLoaded", function () {
+  // Create mobile menu button if it doesn't exist
+  const navElement = document.querySelector("nav .container");
+  if (navElement) {
+    // Check if mobile menu button already exists
+    if (!document.querySelector(".mobile-menu-btn")) {
+      // Create mobile menu button
+      const mobileMenuBtn = document.createElement("div");
+      mobileMenuBtn.className = "mobile-menu-btn";
+
+      // Create three lines for the hamburger icon
+      for (let i = 0; i < 3; i++) {
+        const span = document.createElement("span");
+        mobileMenuBtn.appendChild(span);
+      }
+
+      // Find the appropriate place to insert the button (usually at the beginning or end of nav)
+      const navRight = document.querySelector("nav .nav-right");
+      if (navRight) {
+        navRight.prepend(mobileMenuBtn);
+      } else {
+        navElement.appendChild(mobileMenuBtn);
+      }
+    }
+
+    // Get navigation links container
+    const navLinks = document.querySelector("nav .nav-links");
+    if (navLinks) {
+      // Add a class to identify it
+      navLinks.classList.add("nav-links");
+
+      // Get mobile menu button and add click event
+      const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener("click", function () {
+          // Toggle active class on nav-links
+          navLinks.classList.toggle("active");
+        });
+
+        // Close menu when clicking anywhere else
+        document.addEventListener("click", function (event) {
+          if (
+            !event.target.closest(".mobile-menu-btn") &&
+            !event.target.closest(".nav-links") &&
+            navLinks.classList.contains("active")
+          ) {
+            navLinks.classList.remove("active");
+          }
+        });
+
+        // Close menu when clicking a nav link
+        const links = navLinks.querySelectorAll("a");
+        links.forEach((link) => {
+          link.addEventListener("click", function () {
+            navLinks.classList.remove("active");
+          });
+        });
+      }
+    }
+  }
+});
+
 //___________LOGGING IN WITH GOOGLE_______________________
 
 // Check if we're on a page with the login button

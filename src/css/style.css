@@ -199,3 +199,59 @@ nav
   text-decoration: none;
   color: inherit;
 }
+
+/* VIBE CODING */
+/* Extra small devices (phones, 575px and down) */
+@media only screen and (max-width: 575px) {
+  .container {
+    width: 95%;
+  }
+  
+  .pt-3 {
+    padding-top: 5em;
+    height: auto;
+  }
+  
+  .btn {
+    padding: 0.8em 1.8em;
+  }
+  
+  /* Hide cursor effects on mobile */
+  .cursor-dot, .cursor-outline {
+    display: none;
+  }
+}
+
+/* Small devices (landscape phones, 576px to 767px) */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  .container {
+    width: 90%;
+  }
+  
+  .pt-3 {
+    padding-top: 6em;
+    height: auto;
+  }
+  
+  /* Hide cursor effects on mobile */
+  .cursor-dot, .cursor-outline {
+    display: none;
+  }
+}
+
+/* Medium devices (tablets, 768px to 991px) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .container {
+    width: 85%;
+  }
+  
+  .pt-3 {
+    padding-top: 8em;
+    height: auto;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  /* Default styles already defined above */
+}

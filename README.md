@@ -1,6 +1,6 @@
 # KlassConnect
 
-KlassConnect is an educational consisting of updated course content delivery and AI-powered quiz generation.
+KlassConnect is an educational consisting of updated course content delivery and AI-powered quiz generation. Primarily designed for learning purposes, along with vibe coding during times when I had no idea how specific things were meant to be implemented.
 
 ## Tech Stack
 

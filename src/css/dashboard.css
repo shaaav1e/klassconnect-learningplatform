@@ -608,3 +608,172 @@
 .enrolled-courses-section button {
   margin-top: 20px;
 }
+
+
+
+/* Vibe Coding - Responsiveness */
+.mobile-sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mobile-sidebar-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: white;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.mobile-sidebar-toggle span:before,
+.mobile-sidebar-toggle span:after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 3px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.mobile-sidebar-toggle span:before {
+    top: -7px;
+}
+
+.mobile-sidebar-toggle span:after {
+    top: 7px;
+}
+
+.mobile-sidebar-toggle.active span {
+    background: transparent;
+}
+
+.mobile-sidebar-toggle.active span:before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.mobile-sidebar-toggle.active span:after {
+    transform: rotate(-45deg);
+    top: 0;
+}
+
+/* Responsive Media Queries for Dashboard */
+@media screen and (max-width: 991px) {
+    .dash-left {
+        padding-left: 5em;
+    }
+    
+    .right-dash {
+        padding-right: 2em;
+    }
+    
+    .stats-charts {
+        flex-direction: column;
+    }
+    
+    .chart-column, .pie-container {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Show mobile sidebar toggle */
+    .mobile-sidebar-toggle {
+        display: flex;
+    }
+    
+    /* Adjust sidebar for mobile */
+    .left-section {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        width: 70%;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .left-section.active {
+        left: 0;
+    }
+    
+    /* Reset padding for main layout */
+    .dash-left {
+        padding-left: 1em;
+    }
+    
+    .right-dash {
+        padding-right: 1em;
+        padding-left: 1em;
+    }
+    
+    /* Adjust dashboard layout */
+    .dashboard {
+        flex-direction: column;
+    }
+    
+    .right-sec {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    /* Adjust content grids */
+    .dashboard-stats, .course-grid, .assignment-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Ensure content doesn't overflow */
+    .dashboard-home {
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    /* Further adjustments for smaller screens */
+    .left-section {
+        width: 85%;
+    }
+    
+    .stat-card, .course-card, .assignment-card {
+        padding: 0.8rem;
+    }
+    
+    .dashboard-home {
+        padding: 0.8rem;
+    }
+    
+    .user-profile {
+        flex-direction: column;
+    }
+    
+    .user-name {
+        display: none;
+    }
+    
+    .logout-modal {
+        left: auto;
+        right: 10px;
+    }
+    
+    /* Smaller header elements */
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+}
